@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Search, Sparkles, ArrowUpDown } from "lucide-react";
+import { Search, Sparkles, ArrowUpDown, Filter } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
 import { PRODUCTS, CATEGORIES } from "@/data/data";
 
@@ -30,114 +30,171 @@ export default function MenuPage() {
   }, [selectedCategory, searchQuery, sortBy]);
 
   return (
-    <div className="py-12 md:py-16 bg-[#FAF7F2] min-h-screen">
+    <div className="py-8 md:py-14 bg-[#FAF7F2] min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-10">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#F6EFFC] text-[#4a196d] border border-[#e5d2f2] text-xs font-semibold uppercase tracking-wider mb-3">
             <Sparkles className="w-3.5 h-3.5" />
-            Fresh From Cloud9
+            <span>Cloud9 Menu Collection</span>
           </div>
-          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-[#1F0F29]">
-            The Bakery Menu
+          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-[#1F0F29] tracking-tight">
+            The Complete Bakery Menu
           </h1>
-          <p className="text-stone-600 text-xs sm:text-sm mt-3">
-            Explore our handcrafted luxury cakes, gooey NYC cookies, layered dessert cups, and cold glass bottle milks made fresh daily with love.
+          <p className="text-stone-600 text-xs sm:text-sm mt-3 leading-relaxed">
+            All 4 handcrafted collections baked fresh on Cloud9 using 100% French butter, Belgian couverture chocolate, and pure dairy.
           </p>
         </div>
 
-        {/* Search & Filter Bar */}
-        <div className="bg-white/90 backdrop-blur-md p-4 rounded-3xl border border-[#e5d2f2] shadow-sm mb-8 space-y-4 md:space-y-0 md:flex md:items-center md:justify-between gap-4">
+        {/* Search & Sort Controls */}
+        <div className="bg-white/90 backdrop-blur-md p-3 sm:p-4 rounded-3xl border border-[#e5d2f2] shadow-sm mb-8 space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between gap-4">
           {/* Search box */}
           <div className="relative flex-1 max-w-md">
             <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search cakes, pistachios, lotus, cold brew..."
+              placeholder="Search cakes, cookies, dessert cups, glass bottles..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-stone-50/80 border border-stone-200 rounded-2xl pl-10 pr-4 py-2.5 text-xs sm:text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#4a196d]/30"
+              className="w-full bg-stone-50/90 border border-stone-200 rounded-2xl pl-10 pr-4 py-2 text-xs sm:text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#4a196d]/20 focus:border-[#4a196d]"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-stone-400 hover:text-stone-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-stone-400 hover:text-stone-600 font-semibold"
               >
                 Clear
               </button>
             )}
           </div>
 
-          {/* Sort dropdown (NO PRICE SORTS) */}
+          {/* Sort dropdown */}
           <div className="flex items-center gap-2">
             <ArrowUpDown className="w-4 h-4 text-stone-400" />
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="bg-stone-50/80 border border-stone-200 rounded-2xl px-3 py-2.5 text-xs text-stone-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#4a196d]/30"
+              className="bg-stone-50/90 border border-stone-200 rounded-2xl px-3 py-2 text-xs text-stone-700 font-semibold focus:outline-none focus:ring-2 focus:ring-[#4a196d]/20 cursor-pointer"
             >
               <option value="featured">Sort by: Featured</option>
-              <option value="rating">Highest Rated (★)</option>
+              <option value="rating">Top Rated (★)</option>
               <option value="name">Alphabetical (A-Z)</option>
             </select>
           </div>
         </div>
 
-        {/* Category Pills */}
+        {/* Category Pills (Dynamic Mapping for All Categories) */}
         <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-none">
           <button
             onClick={() => setSelectedCategory("all")}
-            className={`px-5 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+            className={`px-4 sm:px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
               selectedCategory === "all"
                 ? "bg-[#4a196d] text-white shadow-xs"
                 : "bg-white text-stone-700 border border-[#e5d2f2] hover:bg-[#F6EFFC] hover:text-[#4a196d]"
             }`}
           >
-            All Delights ({PRODUCTS.length})
+            All Collections ({PRODUCTS.length})
           </button>
 
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setSelectedCategory(cat.id)}
-              className={`px-5 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
-                selectedCategory === cat.id
-                  ? "bg-[#4a196d] text-white shadow-xs"
-                  : "bg-white text-stone-700 border border-[#e5d2f2] hover:bg-[#F6EFFC] hover:text-[#4a196d]"
-              }`}
-            >
-              {cat.name} ({PRODUCTS.filter((p) => p.category === cat.id).length})
-            </button>
-          ))}
+          {CATEGORIES.map((cat) => {
+            const count = PRODUCTS.filter((p) => p.category === cat.id).length;
+            const isActive = selectedCategory === cat.id;
+
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`px-4 sm:px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+                  isActive
+                    ? "bg-[#4a196d] text-white shadow-xs"
+                    : "bg-white text-stone-700 border border-[#e5d2f2] hover:bg-[#F6EFFC] hover:text-[#4a196d]"
+                }`}
+              >
+                {cat.name} ({count})
+              </button>
+            );
+          })}
         </div>
 
-        {/* Results grid */}
-        {filteredProducts.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-3xl border border-[#e5d2f2] p-8">
-            <div className="w-16 h-16 rounded-full bg-[#F6EFFC] flex items-center justify-center mx-auto mb-4 text-[#4a196d]">
-              <Search className="w-8 h-8" />
-            </div>
-            <h3 className="font-serif text-xl font-bold text-[#1F0F29] mb-1">
-              No sweet matches found
-            </h3>
-            <p className="text-stone-500 text-xs mb-4">
-              We couldn&apos;t find anything matching &ldquo;{searchQuery}&rdquo;. Try another ingredient like chocolate, pistachio, or coffee.
-            </p>
-            <button
-              onClick={() => {
-                setSearchQuery("");
-                setSelectedCategory("all");
-              }}
-              className="px-5 py-2 rounded-full bg-[#4a196d] text-white text-xs font-semibold hover:bg-[#340f4e]"
-            >
-              Reset Filters
-            </button>
+        {/* If 'all' selected and no search, group by category for pristine browsing */}
+        {selectedCategory === "all" && !searchQuery ? (
+          <div className="space-y-12 sm:space-y-16">
+            {CATEGORIES.map((cat) => {
+              const catProducts = PRODUCTS.filter((p) => p.category === cat.id);
+
+              return (
+                <section key={cat.id} className="space-y-6">
+                  {/* Category Title Header */}
+                  <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#e5d2f2] pb-3 gap-2">
+                    <div>
+                      <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#4a196d] mb-1">
+                        <Sparkles className="w-3.5 h-3.5" />
+                        <span>Category Collection</span>
+                      </div>
+                      <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#1F0F29]">
+                        {cat.name}
+                      </h2>
+                      <p className="text-xs text-stone-500 mt-1">
+                        {cat.tagline}
+                      </p>
+                    </div>
+                    <span className="text-xs font-bold text-stone-400">
+                      {catProducts.length} Items Available
+                    </span>
+                  </div>
+
+                  {/* Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+                    {catProducts.map((product) => (
+                      <ProductCard key={product.id} product={product} />
+                    ))}
+                  </div>
+                </section>
+              );
+            })}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+          /* Filtered or Searched Results */
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#1F0F29]">
+                {selectedCategory === "all"
+                  ? `Showing results for "${searchQuery}"`
+                  : CATEGORIES.find((c) => c.id === selectedCategory)?.name}
+              </h2>
+              <span className="text-xs text-stone-500 font-semibold">
+                {filteredProducts.length} items
+              </span>
+            </div>
+
+            {filteredProducts.length === 0 ? (
+              <div className="text-center py-20 bg-white rounded-3xl border border-[#e5d2f2] p-8">
+                <div className="w-14 h-14 rounded-full bg-[#F6EFFC] flex items-center justify-center mx-auto mb-3 text-[#4a196d]">
+                  <Search className="w-6 h-6" />
+                </div>
+                <h3 className="font-serif text-xl font-bold text-[#1F0F29] mb-1">
+                  No treats found
+                </h3>
+                <p className="text-stone-500 text-xs mb-4">
+                  We couldn&apos;t find anything matching &ldquo;{searchQuery}&rdquo;. Try another term.
+                </p>
+                <button
+                  onClick={() => {
+                    setSearchQuery("");
+                    setSelectedCategory("all");
+                  }}
+                  className="px-5 py-2 rounded-full bg-[#4a196d] text-white text-xs font-semibold hover:bg-[#340f4e]"
+                >
+                  Clear Filters
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+                {filteredProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

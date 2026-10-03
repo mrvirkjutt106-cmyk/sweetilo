@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Menu as MenuIcon, Sparkles, ShoppingBag, BookOpen } from "lucide-react";
+import { Home, UtensilsCrossed, Sparkles, ShoppingBag, BookOpen } from "lucide-react";
 import { useBucket } from "@/context/BucketContext";
 
 export default function MobileBottomNav() {
@@ -11,60 +11,57 @@ export default function MobileBottomNav() {
   const { toggleBucket, totalItems } = useBucket();
 
   const isHome = pathname === "/";
-  const isMenu = pathname.startsWith("/category");
+  const isMenu = pathname.startsWith("/menu") || pathname.startsWith("/category");
   const isCustom = pathname === "/custom-order";
   const isStory = pathname === "/about";
 
   return (
-    <div className="lg:hidden fixed bottom-3 inset-x-0 z-50 px-3 pointer-events-none flex justify-center">
-      {/* Pill-shaped White Navigation Bar */}
-      <nav className="pointer-events-auto w-full max-w-md bg-white/95 backdrop-blur-xl border border-stone-200/90 rounded-full px-2 py-2 shadow-2xl flex items-center justify-around">
+    <div className="lg:hidden fixed bottom-3 inset-x-0 z-50 px-4 pointer-events-none flex justify-center">
+      {/* Fixed White Pill-shaped Bottom Navigation Bar */}
+      <nav className="pointer-events-auto w-full max-w-sm bg-white/95 backdrop-blur-2xl border border-stone-200/90 rounded-full px-2 py-2 shadow-[0_10px_35px_rgba(0,0,0,0.14)] flex items-center justify-around">
         {/* Home */}
         <Link
           href="/"
-          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-full transition-all ${
-            isHome ? "text-[#4a196d]" : "text-stone-500 hover:text-stone-800"
+          className={`flex flex-col items-center justify-center py-1 px-3 rounded-full transition-all ${
+            isHome ? "text-[#4a196d]" : "text-stone-400 hover:text-stone-700"
           }`}
         >
           <Home className={`w-5 h-5 ${isHome ? "stroke-[2.5]" : "stroke-2"}`} />
-          <span className={`text-[10px] mt-0.5 ${isHome ? "font-bold" : "font-medium"}`}>
+          <span className={`text-[10px] mt-0.5 ${isHome ? "font-bold text-[#4a196d]" : "font-medium"}`}>
             Home
           </span>
         </Link>
 
         {/* Menu */}
         <Link
-          href="/category/cakes"
-          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-full transition-all ${
-            isMenu ? "text-[#4a196d]" : "text-stone-500 hover:text-stone-800"
+          href="/menu"
+          className={`flex flex-col items-center justify-center py-1 px-3 rounded-full transition-all ${
+            isMenu ? "text-[#4a196d]" : "text-stone-400 hover:text-stone-700"
           }`}
         >
-          <MenuIcon className={`w-5 h-5 ${isMenu ? "stroke-[2.5]" : "stroke-2"}`} />
-          <span className={`text-[10px] mt-0.5 ${isMenu ? "font-bold" : "font-medium"}`}>
+          <UtensilsCrossed className={`w-5 h-5 ${isMenu ? "stroke-[2.5]" : "stroke-2"}`} />
+          <span className={`text-[10px] mt-0.5 ${isMenu ? "font-bold text-[#4a196d]" : "font-medium"}`}>
             Menu
           </span>
         </Link>
 
-        {/* Custom with required subtext '3-Day Notice Required' */}
+        {/* Custom Order */}
         <Link
           href="/custom-order"
-          className={`flex flex-col items-center justify-center py-1 px-2 rounded-full transition-all relative ${
-            isCustom ? "text-[#4a196d]" : "text-stone-500 hover:text-stone-800"
+          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-full transition-all ${
+            isCustom ? "text-[#4a196d]" : "text-stone-400 hover:text-stone-700"
           }`}
         >
           <Sparkles className={`w-5 h-5 ${isCustom ? "stroke-[2.5]" : "stroke-2"}`} />
-          <span className={`text-[10px] leading-tight ${isCustom ? "font-bold" : "font-semibold"}`}>
+          <span className={`text-[10px] leading-tight ${isCustom ? "font-bold text-[#4a196d]" : "font-medium"}`}>
             Custom
-          </span>
-          <span className="text-[7.5px] leading-none text-stone-600 font-semibold tracking-tight whitespace-nowrap mt-0.5">
-            3-Day Notice Required
           </span>
         </Link>
 
-        {/* Bucket (Cart) */}
+        {/* Bucket */}
         <button
           onClick={toggleBucket}
-          className="flex flex-col items-center justify-center py-1 px-2.5 rounded-full text-stone-500 hover:text-stone-800 transition-all relative cursor-pointer"
+          className="flex flex-col items-center justify-center py-1 px-3 rounded-full text-stone-400 hover:text-stone-700 transition-all relative cursor-pointer"
           aria-label="Open Bucket"
         >
           <div className="relative">
@@ -80,15 +77,15 @@ export default function MobileBottomNav() {
           </span>
         </button>
 
-        {/* Story */}
+        {/* Our Story */}
         <Link
           href="/about"
-          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-full transition-all ${
-            isStory ? "text-[#4a196d]" : "text-stone-500 hover:text-stone-800"
+          className={`flex flex-col items-center justify-center py-1 px-3 rounded-full transition-all ${
+            isStory ? "text-[#4a196d]" : "text-stone-400 hover:text-stone-700"
           }`}
         >
           <BookOpen className={`w-5 h-5 ${isStory ? "stroke-[2.5]" : "stroke-2"}`} />
-          <span className={`text-[10px] mt-0.5 ${isStory ? "font-bold" : "font-medium"}`}>
+          <span className={`text-[10px] mt-0.5 ${isStory ? "font-bold text-[#4a196d]" : "font-medium"}`}>
             Story
           </span>
         </Link>

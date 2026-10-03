@@ -8,27 +8,21 @@ export default function WhatsAppFAB() {
     "https://wa.me/923001234567?text=Hi%20Sweetilo!%20I'm%20interested%20in%20ordering%20handcrafted%20treats%20from%20your%20cloud%20bakehouse.";
 
   return (
-    <div className="fixed bottom-20 right-4 z-40 flex items-center gap-2 group">
-      {/* Optional Styled chat prompt pill for mobile & desktop */}
-      <a
-        href={whatsappUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/95 text-stone-700 text-xs font-semibold shadow-lg border border-stone-200/80 backdrop-blur-md hover:text-[#25D366] transition-colors"
-      >
-        <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" />
-        <span>Chat on WhatsApp</span>
-      </a>
+    <div className="fixed bottom-20 lg:bottom-8 right-5 lg:right-8 z-40 flex items-center gap-2.5 group">
+      {/* Desktop/Tablet Hover Pill Tooltip */}
+      <span className="hidden sm:inline-block px-3.5 py-1.5 rounded-full bg-white/95 text-stone-700 text-xs font-semibold shadow-lg border border-stone-200/80 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+        Chat with Baker
+      </span>
 
-      {/* Prominent Floating Green WhatsApp Action Button */}
+      {/* Prominent Floating Green WhatsApp Action Button pinned to bottom right */}
       <motion.a
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Order or Chat on WhatsApp"
-        whileHover={{ scale: 1.1 }}
+        whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.92 }}
-        className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-2xl hover:bg-[#20bd5a] transition-all hover:shadow-[0_8px_25px_rgba(37,211,102,0.45)] ring-4 ring-white/80"
+        className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-[0_8px_30px_rgba(37,211,102,0.4)] hover:bg-[#20bd5a] transition-all ring-4 ring-white/90 cursor-pointer"
       >
         <svg
           viewBox="0 0 24 24"

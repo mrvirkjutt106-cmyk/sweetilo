@@ -1,150 +1,68 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import {
-  Sparkles,
-  ArrowRight,
-  Heart,
-  Star,
-  ShoppingBag,
-  Flame,
-  ChevronRight,
-  Search,
-  ArrowUpDown,
-  Award,
-} from "lucide-react";
-import FeaturedGrid from "@/components/FeaturedGrid";
-import BrandFeatures from "@/components/BrandFeatures";
-import ProductCard from "@/components/ProductCard";
-import BentoHero from "@/components/BentoHero";
-import BentoGrid from "@/components/BentoGrid";
-import { PRODUCTS, TESTIMONIALS } from "@/data/data";
-import { useBucket } from "@/context/BucketContext";
+import { Sparkles, ArrowRight, Star, Heart, Award } from "lucide-react";
+import HeroV3 from "@/components/HeroV3";
+import BentoShowcaseV3 from "@/components/BentoShowcaseV3";
+import CothmShield from "@/components/CothmShield";
+import { TESTIMONIALS } from "@/data/data";
 
 export default function HomePage() {
-  const { addToBucket } = useBucket();
-
-  // Search & Filter state for the Homepage search bar
-  const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState("featured");
-
-  // Filtered items based on search query
-  const displayedItems = useMemo(() => {
-    let items = PRODUCTS;
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      items = items.filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          p.description.toLowerCase().includes(q) ||
-          p.categoryName.toLowerCase().includes(q) ||
-          (p.ingredients && p.ingredients.some((ing) => ing.toLowerCase().includes(q)))
-      );
-    } else {
-      // Default to chef specials
-      items = items.filter((item) => item.isChefSpecial);
-    }
-
-    return [...items].sort((a, b) => {
-      if (sortBy === "rating") return b.rating - a.rating;
-      if (sortBy === "name") return a.name.localeCompare(b.name);
-      return 0; // featured default
-    });
-  }, [searchQuery, sortBy]);
-
   return (
     <div className="relative overflow-hidden bg-[#FAF7F2]">
-      {/* Ambient background glows */}
-      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-gradient-to-tr from-[#e5d2f2]/40 via-amber-100/30 to-[#F6EFFC]/50 blur-3xl rounded-full pointer-events-none -z-10" />
+      {/* ================= 1. IMMERSIVE 90VH HERO SECTION ================= */}
+      <HeroV3 />
 
-      {/* ----------------- BENTO BOX UI ARCHITECTURE ----------------- */}
-      <section className="pt-2 sm:pt-4 pb-8 sm:pb-12">
-        <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 space-y-3.5 sm:space-y-6">
-          <BentoHero />
-          <BentoGrid />
-        </div>
-      </section>
+      {/* ================= 2. THE BENTO-BOX SHOWCASE (4 CATEGORIES) ================= */}
+      <BentoShowcaseV3 />
 
-      {/* ----------------- MINIMALIST WIDE PILL SEARCH BAR ----------------- */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 mb-12">
-        <div className="bg-white/95 backdrop-blur-md p-2 sm:p-2.5 rounded-full border border-[#e5d2f2] shadow-sm flex items-center gap-2">
-          {/* Search Icon & Input */}
-          <div className="relative flex-1 flex items-center pl-4">
-            <Search className="w-5 h-5 text-stone-400 flex-shrink-0" />
-            <input
-              type="text"
-              placeholder="Search cakes, cookies, dessert cups, glass bottles, pistachio..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-transparent pl-3 pr-4 py-2 text-xs sm:text-sm text-stone-800 placeholder-stone-400 focus:outline-none"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="text-xs text-stone-400 hover:text-stone-600 mr-2"
-              >
-                Clear
-              </button>
-            )}
-          </div>
-
-          {/* Sort By Dropdown */}
-          <div className="flex items-center gap-1.5 pr-2 border-l border-stone-200 pl-3">
-            <ArrowUpDown className="w-3.5 h-3.5 text-stone-400 hidden sm:inline" />
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="bg-transparent text-xs text-stone-700 font-semibold focus:outline-none cursor-pointer py-1.5"
-            >
-              <option value="featured">Featured</option>
-              <option value="rating">Top Rated (★)</option>
-              <option value="name">Name (A-Z)</option>
-            </select>
-          </div>
-        </div>
-      </section>
-
-      {/* ----------------- FEATURED CATEGORIES (REDUCED TIGHT SPACING) ----------------- */}
-      <FeaturedGrid />
-
-      {/* ----------------- ABOUT US SECTION (HOME PAGE PROMPT SPECIFIC) ----------------- */}
-      <section className="py-16 md:py-20 bg-white border-y border-[#e5d2f2]/70 relative">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-[#FAF7F2] rounded-[32px] p-8 sm:p-14 border border-[#e5d2f2] shadow-sm relative overflow-hidden">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-              <div className="md:col-span-4 relative">
-                <div className="w-48 h-48 sm:w-56 sm:h-56 mx-auto rounded-3xl overflow-hidden shadow-lg border-4 border-white">
+      {/* ================= 3. OUR STORY & COTHM CERTIFICATION ================= */}
+      <section className="py-16 sm:py-24 bg-white border-y border-[#e5d2f2]/70 relative">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="rounded-[32px] sm:rounded-[40px] bg-[#FAF7F2] p-8 sm:p-14 border border-[#e5d2f2] shadow-sm relative overflow-hidden">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              {/* Mascot & Baker Imagery */}
+              <div className="lg:col-span-5 flex flex-col items-center justify-center text-center">
+                <div className="relative w-44 h-44 sm:w-56 sm:h-56">
                   <img
-                    src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=600&q=80"
-                    alt="COTHM Certified Baker"
-                    className="w-full h-full object-cover"
+                    src="/cloud-mascot.jpg"
+                    alt="Sweetilo Baker Cloud Mascot"
+                    className="w-full h-full object-contain drop-shadow-[0_15px_30px_rgba(74,25,109,0.2)]"
                   />
                 </div>
-                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-[#4a196d] text-white px-3.5 py-1 rounded-full text-[11px] font-bold shadow-md whitespace-nowrap">
-                  COTHM Certified
+                <div className="mt-3">
+                  <CothmShield className="w-14 h-16 mx-auto" />
                 </div>
               </div>
 
-              <div className="md:col-span-8 space-y-4 text-center md:text-left">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F6EFFC] text-[#4a196d] border border-[#e5d2f2] text-xs font-bold uppercase tracking-wider">
+              {/* Story Narrative */}
+              <div className="lg:col-span-7 space-y-4 text-left">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F6EFFC] text-[#4a196d] border border-[#e5d2f2] text-xs font-semibold uppercase tracking-wider">
                   <Award className="w-3.5 h-3.5" />
-                  Our Story
+                  <span>COTHM Certified Baker</span>
                 </div>
 
-                {/* EXACT REQUIRED TEXT */}
-                <blockquote className="font-serif text-lg sm:text-xl text-[#1F0F29] leading-relaxed italic">
-                  &ldquo;Hi, I’m a COTHM Certified Baker. But more than a title, I’m someone with a dream. A dream of creating a little haven for all the sweet tooths out there. A place where it’s not just about cake, pastry, or dessert. It’s about a spoonful of joy. A taste of home. And love, baked into every layer.&rdquo;
+                <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1F0F29] leading-tight">
+                  A Spoonful of Joy, Baked into Every Layer.
+                </h2>
+
+                <blockquote className="font-serif text-base sm:text-lg text-stone-700 italic leading-relaxed pt-1">
+                  &ldquo;More than a title, this is a dream of creating a haven for all the sweet tooths out there. We never compromise on French butter, Belgian chocolate, or freshness.&rdquo;
                 </blockquote>
 
-                <div className="pt-2">
+                <p className="text-xs sm:text-sm text-stone-600 font-sans leading-relaxed">
+                  Every morning, our cloud bakehouse prepares strictly limited micro-batches. Whether it is a multi-tiered ganache cake or warm molten cookies, each treat is boxed with care and dispatched across Lahore, Karachi & Islamabad.
+                </p>
+
+                <div className="pt-3">
                   <Link
                     href="/about"
-                    className="inline-flex items-center gap-2 text-xs font-bold text-[#4a196d] hover:text-[#340f4e] group"
+                    className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#4a196d] hover:text-[#381054] group"
                   >
-                    <span>Read Our Full Homemade Story</span>
-                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <span>Read Our Complete Story</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                   </Link>
                 </div>
               </div>
@@ -153,107 +71,29 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ----------------- CHEF'S SIGNATURE DELIGHTS SHOWCASE ----------------- */}
-      <section className="py-16 md:py-20 relative">
+      {/* ================= 4. TESTIMONIALS (CUSTOMER LOVE) ================= */}
+      <section className="py-16 sm:py-24 bg-[#FAF7F2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F6EFFC] text-[#4a196d] border border-[#e5d2f2] text-xs font-semibold uppercase tracking-wider mb-2">
-                <Flame className="w-3.5 h-3.5 text-[#4a196d]" />
-                {searchQuery ? `Search Results (${displayedItems.length})` : "Chef's Signature Showcase"}
-              </div>
-              <h2 className="font-serif text-3xl md:text-4xl font-bold text-[#1F0F29] tracking-tight">
-                {searchQuery ? `Treats matching "${searchQuery}"` : "Handcrafted Masterpieces"}
-              </h2>
-            </div>
-          </div>
-
-          {displayedItems.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-3xl border border-[#e5d2f2] p-6">
-              <p className="text-stone-500 text-sm">
-                No sweet treats found matching &ldquo;{searchQuery}&rdquo;. Try another keyword.
-              </p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-              {displayedItems.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ----------------- BRAND FEATURES (UI MOCKUP SECTION) ----------------- */}
-      <BrandFeatures />
-
-      {/* ----------------- THE SWEETILO DIFFERENCE COMPARISON ----------------- */}
-      <section className="py-16 md:py-20 bg-white border-b border-[#e5d2f2]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-xl mx-auto mb-10">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold text-[#1F0F29]">
-              The Cloud9 Standard
-            </h2>
-            <p className="text-stone-500 text-xs sm:text-sm mt-2">
-              Why our treats stand out from generic supermarket shelves and mass bakeries.
-            </p>
-          </div>
-
-          <div className="rounded-3xl border border-[#e5d2f2] overflow-hidden shadow-card">
-            <div className="grid grid-cols-3 bg-[#FAF7F2] text-xs sm:text-sm font-bold p-4 border-b border-[#e5d2f2]">
-              <span className="text-stone-500">Benchmark Factor</span>
-              <span className="text-[#4a196d]">Sweetilo Homemade</span>
-              <span className="text-stone-400">Ordinary Bakeries</span>
-            </div>
-
-            <div className="divide-y divide-purple-50 text-xs sm:text-sm bg-white">
-              <div className="grid grid-cols-3 p-4 items-center">
-                <span className="font-semibold text-stone-800">Butter Quality</span>
-                <span className="text-emerald-700 font-bold">100% French Grass-fed Butter</span>
-                <span className="text-stone-400">Vegetable Margarine / Dalda</span>
-              </div>
-              <div className="grid grid-cols-3 p-4 items-center bg-[#F6EFFC]/30">
-                <span className="font-semibold text-stone-800">Chocolate Source</span>
-                <span className="text-emerald-700 font-bold">Belgian Couverture & Guittard</span>
-                <span className="text-stone-400">Compound / Artificial Cocoa</span>
-              </div>
-              <div className="grid grid-cols-3 p-4 items-center">
-                <span className="font-semibold text-stone-800">Baking Batch Size</span>
-                <span className="text-emerald-700 font-bold">Micro-batches (under 12 cakes)</span>
-                <span className="text-stone-400">Mass assembly line</span>
-              </div>
-              <div className="grid grid-cols-3 p-4 items-center bg-[#F6EFFC]/30">
-                <span className="font-semibold text-stone-800">Preservatives</span>
-                <span className="text-emerald-700 font-bold">Zero Artificial Preservatives</span>
-                <span className="text-stone-400">Extended shelf stabilizers</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ----------------- TESTIMONIALS ----------------- */}
-      <section className="py-16 md:py-20 bg-[#FAF7F2] relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-xl mx-auto mb-12">
+          <div className="text-center max-w-xl mx-auto mb-12 sm:mb-16">
             <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#4a196d] mb-2">
               <Heart className="w-3.5 h-3.5 fill-[#4a196d]" />
-              Customer Love
+              <span>Customer Love</span>
             </div>
-            <h2 className="font-serif text-3xl md:text-5xl font-bold text-[#1F0F29]">
-              Loved by Foodies in Pakistan
+            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#1F0F29]">
+              Loved Across Pakistan
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
             {TESTIMONIALS.map((item, idx) => (
               <motion.div
                 key={idx}
                 whileHover={{ y: -6 }}
-                className="bg-white p-7 rounded-3xl border border-[#e5d2f2] shadow-card flex flex-col justify-between"
+                transition={{ duration: 0.25 }}
+                className="bg-white p-6 sm:p-7 rounded-3xl border border-[#e5d2f2] shadow-sm flex flex-col justify-between"
               >
                 <div>
-                  <div className="flex items-center text-amber-400 mb-4">
+                  <div className="flex items-center text-amber-400 mb-3">
                     {[...Array(item.rating)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                     ))}
@@ -268,7 +108,7 @@ export default function HomePage() {
                     <h4 className="font-bold text-[#1F0F29]">{item.author}</h4>
                     <p className="text-[11px] text-stone-400">{item.city}</p>
                   </div>
-                  <span className="text-[10px] bg-[#F6EFFC] text-[#4a196d] font-bold px-2.5 py-1 rounded-full border border-[#e5d2f2]">
+                  <span className="text-[10px] bg-[#F6EFFC] text-[#4a196d] font-bold px-2 py-0.5 rounded-full border border-[#e5d2f2]">
                     {item.item}
                   </span>
                 </div>
@@ -278,29 +118,32 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ----------------- CTA PROMO BANNER (NO PRICE DISCOUNTS) ----------------- */}
-      <section className="py-14">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="rounded-[36px] bg-gradient-to-r from-[#4a196d] via-[#340f4e] to-[#4a196d] p-8 sm:p-12 text-white relative overflow-hidden shadow-2xl">
-            <div className="relative z-10 max-w-2xl space-y-3.5">
-              <span className="text-xs uppercase tracking-widest text-amber-300 font-bold">
-                Exclusive Prototype Launch
-              </span>
-              <h2 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
-                Craving sweetness right now?
-              </h2>
-              <p className="text-purple-100 text-xs sm:text-sm">
-                Each cake and cookie is baked fresh on Cloud9 and delivered in temperature-controlled totes straight to your doorstep across Lahore, Karachi & Islamabad.
-              </p>
-              <div className="pt-3">
-                <Link
-                  href="/category/cakes"
-                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-white text-[#4a196d] text-xs font-bold hover:bg-amber-300 hover:text-[#340f4e] transition-colors shadow-lg"
-                >
-                  <ShoppingBag className="w-4 h-4" />
-                  <span>Order Handcrafted Treats</span>
-                </Link>
-              </div>
+      {/* ================= 5. LUXURY INVITATION CTA ================= */}
+      <section className="py-14 sm:py-20 px-4 sm:px-6">
+        <div className="max-w-5xl mx-auto rounded-[36px] bg-gradient-to-r from-[#4a196d] via-[#35104e] to-[#4a196d] p-8 sm:p-14 text-white text-center shadow-2xl relative overflow-hidden">
+          <div className="relative z-10 max-w-2xl mx-auto space-y-4">
+            <span className="text-xs uppercase tracking-widest text-amber-300 font-bold">
+              Pure Homemade Magic
+            </span>
+            <h2 className="font-serif text-3xl sm:text-5xl font-bold leading-tight">
+              Ready to indulge in Cloud9?
+            </h2>
+            <p className="text-purple-100 text-xs sm:text-sm max-w-lg mx-auto leading-relaxed">
+              Explore our complete menu of artisan cakes, molten cookies, dessert cups, and cold bottle milks delivered in temperature-controlled totes.
+            </p>
+            <div className="pt-3 flex flex-wrap justify-center gap-3">
+              <Link
+                href="/menu"
+                className="px-8 py-3.5 rounded-full bg-white text-[#4a196d] text-xs sm:text-sm font-bold hover:bg-amber-300 hover:text-[#340f4e] transition-colors shadow-lg"
+              >
+                Browse Full Menu
+              </Link>
+              <Link
+                href="/custom-order"
+                className="px-7 py-3.5 rounded-full bg-white/10 text-white border border-white/20 text-xs sm:text-sm font-semibold hover:bg-white/20 transition-colors"
+              >
+                Custom Celebration Order
+              </Link>
             </div>
           </div>
         </div>

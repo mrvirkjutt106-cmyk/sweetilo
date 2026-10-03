@@ -4,8 +4,9 @@ import { BucketProvider } from "@/context/BucketContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BucketSidebar from "@/components/BucketSidebar";
-import FloatingBucketButton from "@/components/FloatingBucketButton";
 import NotificationToast from "@/components/NotificationToast";
+import MobileBottomNav from "@/components/MobileBottomNav";
+import WhatsAppFAB from "@/components/WhatsAppFAB";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -20,9 +21,9 @@ const playfair = Playfair_Display({
 });
 
 export const metadata = {
-  title: "Sweetilo — Baked on Cloud9, Delivered to Your Heart",
+  title: "Sweetilo — Taste Home. Baked on Cloud9",
   description:
-    "Luxury homemade bakery in Pakistan. Indulge in Belgian Noir Ganache cakes, molten NYC chunk cookies, saffron Tres Leches tubs, and cold brew milks.",
+    "Pakistan’s premier micro-batch cloud bakehouse. Handcrafted Belgian Noir Ganache cakes, molten NYC cookies, saffron Tres Leches tubs, and vintage glass bottle milks.",
   keywords: [
     "Sweetilo",
     "Bakery Lahore",
@@ -34,28 +35,30 @@ export const metadata = {
     "Gourmet bakery Pakistan",
   ],
   openGraph: {
-    title: "Sweetilo — Baked on Cloud9, Delivered to Your Heart",
+    title: "Sweetilo — Taste Home. Baked on Cloud9",
     description:
-      "Handcrafted luxury cakes, molten artisan cookies, and cold brew milks priced in PKR.",
+      "Handcrafted luxury cakes, molten artisan cookies, and cold brew milks across Lahore, Karachi & Islamabad.",
     type: "website",
   },
 };
 
-import MobileBottomNav from "@/components/MobileBottomNav";
-import WhatsAppFAB from "@/components/WhatsAppFAB";
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${outfit.variable} ${playfair.variable}`}>
-      <body className="min-h-screen flex flex-col bg-[#FAF7F2] text-bakery-choc font-sans antialiased selection:bg-[#4a196d] selection:text-white">
+      <body className="min-h-screen flex flex-col bg-[#FAF7F2] text-stone-900 font-sans antialiased selection:bg-[#4a196d] selection:text-white">
         <BucketProvider>
           <NotificationToast />
+          {/* Desktop Floating Glassmorphism Header */}
           <Navbar />
+          {/* Main App Content */}
           <main className="flex-grow pb-24 lg:pb-0">{children}</main>
+          {/* Cart Bucket Drawer */}
           <BucketSidebar />
-          <FloatingBucketButton />
+          {/* Global WhatsApp Action Button pinned to bottom right on all screens */}
           <WhatsAppFAB />
+          {/* Mobile Fixed White Pill Bottom Navigation */}
           <MobileBottomNav />
+          {/* Footer */}
           <Footer />
         </BucketProvider>
       </body>
