@@ -18,8 +18,9 @@ import {
 import FeaturedGrid from "@/components/FeaturedGrid";
 import BrandFeatures from "@/components/BrandFeatures";
 import ProductCard from "@/components/ProductCard";
-import HeroCarousel from "@/components/HeroCarousel";
-import { PRODUCTS, TESTIMONIALS, heroFeaturedProducts } from "@/data/data";
+import BentoHero from "@/components/BentoHero";
+import BentoGrid from "@/components/BentoGrid";
+import { PRODUCTS, TESTIMONIALS } from "@/data/data";
 import { useBucket } from "@/context/BucketContext";
 
 export default function HomePage() {
@@ -58,124 +59,11 @@ export default function HomePage() {
       {/* Ambient background glows */}
       <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-gradient-to-tr from-[#e5d2f2]/40 via-amber-100/30 to-[#F6EFFC]/50 blur-3xl rounded-full pointer-events-none -z-10" />
 
-      {/* ----------------- HERO SECTION ----------------- */}
-      <section className="relative pt-6 pb-16 md:pt-12 md:pb-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-            {/* Left Column: Headline & CTAs */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              className="lg:col-span-7 space-y-5"
-            >
-              {/* Slogan pill */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-[#e5d2f2] shadow-sm backdrop-blur-md">
-                <span className="w-2 h-2 rounded-full bg-[#4a196d] animate-ping" />
-                <Sparkles className="w-4 h-4 text-[#4a196d]" />
-                <span className="text-xs font-bold uppercase tracking-wider text-[#4a196d]">
-                  Baked on Cloud9, delivered to your heart
-                </span>
-              </div>
-
-              {/* Main Headline */}
-              <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-[#1F0F29] leading-[1.08]">
-                Artisanal indulgence, <br />
-                <span className="text-[#4a196d] italic font-serif">
-                  pure homemade
-                </span>{" "}
-                magic.
-              </h1>
-
-              {/* Sub-headline */}
-              <p className="text-base sm:text-lg text-stone-600 max-w-xl leading-relaxed">
-                Pakistan&apos;s premier micro-batch cloud bakehouse. We craft multi-tiered Belgian ganache cakes, molten NYC cookies, and saffron Tres Leches using 100% French grass-fed butter.
-              </p>
-
-              {/* Quick Perks Bar */}
-              <div className="flex flex-wrap items-center gap-5 pt-2 text-xs font-semibold text-stone-700">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-[#F6EFFC] text-[#4a196d] flex items-center justify-center font-bold">
-                    ✓
-                  </div>
-                  <span>100% Homemade</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
-                    ✓
-                  </div>
-                  <span>Same-Day 45m Dispatch</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
-                    ✓
-                  </div>
-                  <span>Lahore • Karachi • Islamabad</span>
-                </div>
-              </div>
-
-              {/* Action Buttons (NO PRICES) */}
-              <div className="flex flex-wrap items-center gap-4 pt-3">
-                <Link
-                  href="/category/cakes"
-                  className="flex items-center gap-2.5 px-8 py-3.5 rounded-2xl bg-[#4a196d] text-white text-xs sm:text-sm font-semibold hover:bg-[#340f4e] transition-all shadow-card hover:shadow-xl hover:scale-105 active:scale-95"
-                >
-                  <ShoppingBag className="w-4 h-4" />
-                  <span>Explore Cakes & Treats</span>
-                  <ArrowRight className="w-4 h-4 text-amber-300" />
-                </Link>
-
-                <Link
-                  href="/about"
-                  className="flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-white border border-[#e5d2f2] text-[#4a196d] text-xs sm:text-sm font-bold hover:bg-[#F6EFFC] transition-all shadow-sm hover:scale-105"
-                >
-                  <span>Our Baker Story</span>
-                </Link>
-              </div>
-
-              {/* Rating Proof snippet */}
-              <div className="flex items-center gap-4 pt-4 border-t border-[#e5d2f2]/70">
-                <div className="flex -space-x-2 overflow-hidden">
-                  <img
-                    className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover"
-                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80"
-                    alt="Customer"
-                  />
-                  <img
-                    className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover"
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
-                    alt="Customer"
-                  />
-                  <img
-                    className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover"
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80"
-                    alt="Customer"
-                  />
-                </div>
-                <div className="text-xs">
-                  <div className="flex items-center text-amber-500 font-bold">
-                    <Star className="w-3.5 h-3.5 fill-amber-400" />
-                    <Star className="w-3.5 h-3.5 fill-amber-400" />
-                    <Star className="w-3.5 h-3.5 fill-amber-400" />
-                    <Star className="w-3.5 h-3.5 fill-amber-400" />
-                    <Star className="w-3.5 h-3.5 fill-amber-400" />
-                    <span className="ml-1 text-stone-800">4.96 / 5.0</span>
-                  </div>
-                  <span className="text-stone-500">Over 3,800+ happy bakery lovers in Pakistan</span>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Right Column: Hero Visual Dynamic Framer Motion Carousel */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.94 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.15 }}
-              className="lg:col-span-5 relative"
-            >
-              <HeroCarousel items={heroFeaturedProducts} />
-            </motion.div>
-          </div>
+      {/* ----------------- BENTO BOX UI ARCHITECTURE ----------------- */}
+      <section className="pt-2 sm:pt-4 pb-8 sm:pb-12">
+        <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 space-y-3.5 sm:space-y-6">
+          <BentoHero />
+          <BentoGrid />
         </div>
       </section>
 

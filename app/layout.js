@@ -41,16 +41,21 @@ export const metadata = {
   },
 };
 
+import MobileBottomNav from "@/components/MobileBottomNav";
+import WhatsAppFAB from "@/components/WhatsAppFAB";
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${outfit.variable} ${playfair.variable}`}>
-      <body className="min-h-screen flex flex-col bg-bakery-vanilla text-bakery-choc font-sans antialiased selection:bg-rose-500 selection:text-white">
+      <body className="min-h-screen flex flex-col bg-[#FAF7F2] text-bakery-choc font-sans antialiased selection:bg-[#4a196d] selection:text-white">
         <BucketProvider>
           <NotificationToast />
           <Navbar />
-          <main className="flex-grow">{children}</main>
+          <main className="flex-grow pb-24 lg:pb-0">{children}</main>
           <BucketSidebar />
           <FloatingBucketButton />
+          <WhatsAppFAB />
+          <MobileBottomNav />
           <Footer />
         </BucketProvider>
       </body>

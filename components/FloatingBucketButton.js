@@ -11,7 +11,7 @@ export default function FloatingBucketButton() {
   if (totalItems === 0) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-40">
+    <div className="hidden lg:block fixed bottom-6 right-6 z-40">
       <motion.button
         initial={{ scale: 0, y: 20 }}
         animate={{ scale: 1, y: 0 }}
