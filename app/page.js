@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Sparkles, ArrowRight, Star, Heart, Award } from "lucide-react";
-import HeroV3 from "@/components/HeroV3";
+import HeroBillboardCarousel from "@/components/HeroBillboardCarousel";
 import BentoShowcaseV3 from "@/components/BentoShowcaseV3";
 import CothmShield from "@/components/CothmShield";
 import { TESTIMONIALS } from "@/data/data";
@@ -12,8 +12,8 @@ import { TESTIMONIALS } from "@/data/data";
 export default function HomePage() {
   return (
     <div className="relative overflow-hidden bg-[#FAF7F2]">
-      {/* ================= 1. IMMERSIVE 90VH HERO SECTION ================= */}
-      <HeroV3 />
+      {/* ================= 1. DYNAMIC ADVERTISING BILLBOARD CAROUSEL (84VH-88VH) ================= */}
+      <HeroBillboardCarousel />
 
       {/* ================= 2. THE BENTO-BOX SHOWCASE (4 CATEGORIES) ================= */}
       <BentoShowcaseV3 />

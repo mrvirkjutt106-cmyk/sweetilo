@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { Search, ShoppingBag, X, Sparkles } from "lucide-react";
+import { Search, ShoppingBag, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useBucket } from "@/context/BucketContext";
 import { PRODUCTS } from "@/data/data";
@@ -51,26 +52,22 @@ export default function Navbar() {
       {/* DESKTOP: Single Floating Glassmorphism Header (Hidden on Mobile) */}
       <header className="hidden lg:flex fixed top-4 inset-x-0 z-50 justify-center px-4 pointer-events-none">
         <div
-          className={`pointer-events-auto w-full max-w-5xl rounded-full px-7 py-3 transition-all duration-300 flex items-center justify-between border ${
+          className={`pointer-events-auto w-full max-w-5xl rounded-full px-6 py-2 transition-all duration-300 flex items-center justify-between border ${
             isScrolled
-              ? "bg-white/80 backdrop-blur-2xl border-white/60 shadow-[0_12px_40px_rgba(74,25,109,0.12)]"
-              : "bg-white/65 backdrop-blur-xl border-white/50 shadow-[0_8px_30px_rgba(0,0,0,0.06)]"
+              ? "bg-white/85 backdrop-blur-2xl border-white/60 shadow-[0_12px_40px_rgba(74,25,109,0.12)]"
+              : "bg-white/70 backdrop-blur-xl border-white/50 shadow-[0_8px_30px_rgba(0,0,0,0.06)]"
           }`}
         >
-          {/* Left: Sweetilo Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group shrink-0">
-            <div className="w-8 h-8 rounded-xl bg-[#4a196d] flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
-              <svg
-                viewBox="0 0 24 24"
-                className="w-4 h-4 fill-current"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M12 2C12.55 2 13 2.45 13 3C13 3.32 12.84 3.6 12.6 3.77L12 4.17L11.4 3.77C11.16 3.6 11 3.32 11 3C11 2.45 11.45 2 12 2ZM18 9V7H6V9C6 9.55 6.45 10 7 10C7.55 10 8 9.55 8 9C8 9.55 8.45 10 9 10C9.55 10 10 9.55 10 9C10 9.55 10.45 10 11 10C11.55 10 12 9.55 12 9C12 9.55 12.45 10 13 10C13.55 10 14 9.55 14 9C14 9.55 14.45 10 15 10C15.55 10 16 9.55 16 9C16 9.55 16.45 10 17 10C17.55 10 18 9.55 18 9ZM19 11.82C18.42 11.31 17.67 11 16.85 11C15.93 11 15.11 11.38 14.5 12C13.89 11.38 13.07 11 12.15 11C11.23 11 10.41 11.38 9.8 12C9.19 11.38 8.37 11 7.45 11C6.63 11 5.88 11.31 5.3 11.82C4.52 12.5 4 13.48 4 14.59V19C4 20.1 4.9 21 6 21H18C19.1 21 20 20.1 20 19V14.59C20 13.48 19.48 12.5 18.7 11.82H19Z" />
-              </svg>
-            </div>
-            <span className="font-serif text-2xl font-bold tracking-tight text-[#1F0F29] group-hover:text-[#4a196d] transition-colors">
-              Sweetilo
-            </span>
+          {/* Left: Strictly Source Official Logo.png via Next.js <Image /> */}
+          <Link href="/" className="flex items-center group shrink-0 py-0.5">
+            <Image
+              src="/Official Logo.png"
+              alt="Sweetilo Bakery"
+              width={180}
+              height={56}
+              priority
+              className="h-12 sm:h-14 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+            />
           </Link>
 
           {/* Center: Navigation Links (Menu, Custom Order, Our Story) */}
@@ -145,7 +142,7 @@ export default function Navbar() {
                 </div>
                 <button
                   onClick={() => setIsSearchOpen(false)}
-                  className="p-1 rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors"
+                  className="p-1 rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -169,7 +166,7 @@ export default function Navbar() {
                     <button
                       key={item.id}
                       onClick={() => handleSelectResult(item.name)}
-                      className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-[#F6EFFC] text-left transition-colors group"
+                      className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-[#F6EFFC] text-left transition-colors group cursor-pointer"
                     >
                       <div className="flex items-center gap-3">
                         <img
