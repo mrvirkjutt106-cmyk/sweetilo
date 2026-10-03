@@ -76,3 +76,15 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #4a196d;
 }
+
+/* Hide scrollbar utility for mobile carousels */
+.hide-scrollbar::-webkit-scrollbar,
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar,
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+

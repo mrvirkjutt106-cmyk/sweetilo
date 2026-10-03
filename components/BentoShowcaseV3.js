@@ -58,8 +58,21 @@ export default function BentoShowcaseV3() {
           </Link>
         </div>
 
-        {/* Clean CSS Grid (Bento Box style) for the 4 Categories */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+        {/* Header right & mobile swipe hint */}
+        <div className="flex items-center justify-between lg:hidden mb-3">
+          <span className="text-[11px] font-semibold text-[#4a196d] bg-[#F6EFFC] px-2.5 py-0.5 rounded-full border border-[#e5d2f2]">
+            Swipe cards &rarr;
+          </span>
+          <Link
+            href="/menu"
+            className="text-xs font-bold text-[#4a196d]"
+          >
+            All Items
+          </Link>
+        </div>
+
+        {/* Clean CSS Grid on Desktop, Swipe Carousel on Mobile */}
+        <div className="flex flex-nowrap overflow-x-auto snap-x hide-scrollbar scrollbar-none gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 lg:grid lg:grid-cols-12 lg:gap-6 lg:overflow-visible lg:pb-0">
           {bentoConfigs.map((cat, idx) => (
             <motion.div
               key={cat.id}
@@ -68,7 +81,7 @@ export default function BentoShowcaseV3() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.6, delay: idx * 0.12 }}
               whileHover={{ y: -6 }}
-              className={`group relative rounded-3xl sm:rounded-[32px] overflow-hidden shadow-sm hover:shadow-2xl border border-stone-200/90 bg-stone-900 flex flex-col justify-between ${cat.gridClass}`}
+              className={`shrink-0 snap-start w-[78vw] sm:w-[50vw] lg:w-auto group relative rounded-3xl sm:rounded-[32px] overflow-hidden shadow-sm hover:shadow-2xl border border-stone-200/90 bg-stone-900 flex flex-col justify-between ${cat.gridClass}`}
             >
               {/* Entire Card Click Target */}
               <Link

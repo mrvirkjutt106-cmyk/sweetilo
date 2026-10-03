@@ -6,10 +6,19 @@ import { motion } from "framer-motion";
 import { Sparkles, ArrowRight, Star, Heart, Award } from "lucide-react";
 import MockupHeroSection from "@/components/MockupHeroSection";
 import BentoShowcaseV3 from "@/components/BentoShowcaseV3";
+import ProductCard from "@/components/ProductCard";
 import CothmShield from "@/components/CothmShield";
-import { TESTIMONIALS } from "@/data/data";
+import { TESTIMONIALS, PRODUCTS } from "@/data/data";
 
 export default function HomePage() {
+  // Top 4 bestsellers across categories for the mobile-responsive swipe carousel
+  const bestsellers = [
+    PRODUCTS.find((p) => p.id === "ganache-cake") || PRODUCTS[0],
+    PRODUCTS.find((p) => p.id === "molten-nyc-cookie") || PRODUCTS[4],
+    PRODUCTS.find((p) => p.id === "tiramisu-cloud-cup") || PRODUCTS[8],
+    PRODUCTS.find((p) => p.id === "badami-rabri-doodh") || PRODUCTS[12],
+  ];
+
   return (
     <div className="relative overflow-hidden bg-[#FAF7F2]">
       {/* ================= 1. SPLIT-LAYOUT HERO & FLOATING FEATURE BANNER ================= */}
@@ -18,7 +27,45 @@ export default function HomePage() {
       {/* ================= 2. THE BENTO-BOX SHOWCASE (4 CATEGORIES) ================= */}
       <BentoShowcaseV3 />
 
-      {/* ================= 3. OUR STORY & COTHM CERTIFICATION ================= */}
+      {/* ================= 3. TRENDING BESTSELLERS CAROUSEL ================= */}
+      <section className="py-12 sm:py-20 bg-[#FAF7F2]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-12 gap-3">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F6EFFC] text-[#4a196d] border border-[#e5d2f2] text-xs font-semibold uppercase tracking-wider mb-2">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Cloud9 Top Picks</span>
+              </div>
+              <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#1F0F29] tracking-tight">
+                Trending Bestsellers
+              </h2>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="sm:hidden text-[11px] font-semibold text-[#4a196d] bg-[#F6EFFC] px-2.5 py-0.5 rounded-full border border-[#e5d2f2]">
+                Swipe treats &rarr;
+              </span>
+              <Link
+                href="/menu"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#4a196d] hover:text-[#381054] transition-colors"
+              >
+                <span>View Full Menu</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Horizontal Scrolling Carousel on Mobile (1.5 to 2 cards visible), 4-col Grid on Desktop */}
+          <div className="flex flex-nowrap overflow-x-auto snap-x hide-scrollbar scrollbar-none gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0">
+            {bestsellers.map((product) => (
+              <div key={product.id} className="shrink-0 snap-start w-[76vw] sm:w-auto">
+                <ProductCard product={product} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= 4. OUR STORY & COTHM CERTIFICATION ================= */}
       <section className="py-16 sm:py-24 bg-white border-y border-[#e5d2f2]/70 relative">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="rounded-[32px] sm:rounded-[40px] bg-[#FAF7F2] p-8 sm:p-14 border border-[#e5d2f2] shadow-sm relative overflow-hidden">
@@ -71,26 +118,32 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ================= 4. TESTIMONIALS (CUSTOMER LOVE) ================= */}
+      {/* ================= 5. TESTIMONIALS (CUSTOMER LOVE) ================= */}
       <section id="reviews" className="py-16 sm:py-24 bg-[#FAF7F2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-xl mx-auto mb-12 sm:mb-16">
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#4a196d] mb-2">
-              <Heart className="w-3.5 h-3.5 fill-[#4a196d]" />
-              <span>Customer Love</span>
+          <div className="flex items-center justify-between sm:justify-center mb-8 sm:mb-16">
+            <div className="text-left sm:text-center max-w-xl sm:mx-auto">
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#4a196d] mb-2">
+                <Heart className="w-3.5 h-3.5 fill-[#4a196d]" />
+                <span>Customer Love</span>
+              </div>
+              <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#1F0F29]">
+                Loved Across Pakistan
+              </h2>
             </div>
-            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#1F0F29]">
-              Loved Across Pakistan
-            </h2>
+            <span className="sm:hidden text-[11px] font-semibold text-[#4a196d] bg-[#F6EFFC] px-2.5 py-0.5 rounded-full border border-[#e5d2f2] shrink-0">
+              Swipe reviews &rarr;
+            </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+          {/* Horizontal Scrolling Carousel on Mobile (1.5 to 2 cards visible), Grid on Desktop */}
+          <div className="flex flex-nowrap overflow-x-auto snap-x hide-scrollbar scrollbar-none gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 md:grid md:grid-cols-2 lg:grid-cols-4 md:overflow-visible md:pb-0">
             {TESTIMONIALS.map((item, idx) => (
               <motion.div
                 key={idx}
                 whileHover={{ y: -6 }}
                 transition={{ duration: 0.25 }}
-                className="bg-white p-6 sm:p-7 rounded-3xl border border-[#e5d2f2] shadow-sm flex flex-col justify-between"
+                className="shrink-0 snap-start w-[78vw] sm:w-[50vw] md:w-auto bg-white p-6 sm:p-7 rounded-3xl border border-[#e5d2f2] shadow-sm flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center text-amber-400 mb-3">

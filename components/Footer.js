@@ -11,15 +11,16 @@ export default function Footer() {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-[#4a196d]/20 blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-purple-900/40">
-          {/* Brand info */}
-          <div className="lg:col-span-2 space-y-4">
+        {/* On mobile: 2-column grid (grid-cols-2) so links sit side-by-side to save space and mimic desktop density */}
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10 pb-12 border-b border-purple-900/40">
+          {/* Brand info (spans 2 cols on mobile, 2 cols on desktop) */}
+          <div className="col-span-2 lg:col-span-2 space-y-4">
             <Link href="/" className="inline-block group">
               <div className="bg-white/95 rounded-2xl p-2.5 inline-block shadow-md">
                 <img
                   src="/Official Logo.png"
                   alt="Sweetilo Bakery Logo"
-                  className="h-14 w-auto object-contain"
+                  className="h-12 sm:h-14 w-auto object-contain"
                 />
               </div>
             </Link>
@@ -28,14 +29,14 @@ export default function Footer() {
               “Baked on Cloud9, delivered to your heart.” Handcrafted cakes, molten NYC cookies, chilled dessert cups, and vintage glass bottle brews.
             </p>
 
-            <div className="pt-2 flex items-center gap-2 text-xs text-amber-300 font-medium">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>COTHM Certified Baker • Halal Certified • 100% Grass-Fed Butter</span>
+            <div className="pt-1 flex items-center gap-2 text-xs text-amber-300 font-medium">
+              <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span className="text-[11px] sm:text-xs">COTHM Certified Baker • Halal Certified • 100% Grass-Fed Butter</span>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="space-y-3">
+          {/* Quick Links (Column 1 on Mobile) */}
+          <div className="col-span-1 space-y-3">
             <h4 className="font-serif text-sm font-bold text-white tracking-wider uppercase">
               Collections
             </h4>
@@ -62,36 +63,36 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/custom-order" className="hover:text-amber-300 transition-colors font-medium text-amber-200">
-                  Custom Order & Quotes ✨
+                  Custom Order ✨
                 </Link>
               </li>
               <li>
                 <Link href="/about" className="hover:text-amber-300 transition-colors font-semibold text-purple-300">
-                  About Our Baker Story →
+                  About Our Story →
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Hub Locations */}
-          <div className="space-y-3">
+          {/* Hub Locations (Column 2 on Mobile) */}
+          <div className="col-span-1 space-y-3">
             <h4 className="font-serif text-sm font-bold text-white tracking-wider uppercase">
               Bakehouses
             </h4>
             <div className="space-y-2.5 text-xs text-stone-400">
-              <div className="flex items-start gap-2">
+              <div className="flex items-start gap-1.5 sm:gap-2">
                 <MapPin className="w-4 h-4 text-[#8a3bb5] shrink-0 mt-0.5" />
                 <div>
-                  <strong className="text-stone-200">Lahore:</strong> DHA Phase 5 & Gulberg III
+                  <strong className="text-stone-200">Lahore:</strong> DHA & Gulberg
                 </div>
               </div>
-              <div className="flex items-start gap-2">
+              <div className="flex items-start gap-1.5 sm:gap-2">
                 <MapPin className="w-4 h-4 text-[#8a3bb5] shrink-0 mt-0.5" />
                 <div>
                   <strong className="text-stone-200">Karachi:</strong> Clifton Block 4
                 </div>
               </div>
-              <div className="flex items-start gap-2">
+              <div className="flex items-start gap-1.5 sm:gap-2">
                 <MapPin className="w-4 h-4 text-[#8a3bb5] shrink-0 mt-0.5" />
                 <div>
                   <strong className="text-stone-200">Islamabad:</strong> F-7 Markaz
@@ -101,7 +102,7 @@ export default function Footer() {
           </div>
 
           {/* Hours & Contact */}
-          <div className="space-y-3">
+          <div className="col-span-2 sm:col-span-1 space-y-3 pt-2 sm:pt-0 border-t border-purple-900/30 sm:border-t-0">
             <h4 className="font-serif text-sm font-bold text-white tracking-wider uppercase">
               Bake Hours
             </h4>

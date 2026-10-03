@@ -37,10 +37,10 @@ export default function CategoryPage({ params }) {
   const otherCategories = CATEGORIES.filter((c) => c.slug !== slug);
 
   return (
-    <div className="py-10 md:py-16 bg-[#FAF7F2] min-h-screen">
+    <div className="py-6 sm:py-12 bg-[#FAF7F2]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back breadcrumb */}
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <Link
             href="/"
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-500 hover:text-[#4a196d] transition-colors"
@@ -50,17 +50,17 @@ export default function CategoryPage({ params }) {
           </Link>
         </div>
 
-        {/* Category Hero Banner (NO PRICES) */}
-        <div className="relative rounded-[32px] overflow-hidden bg-gradient-to-r from-[#4a196d] to-[#340f4e] text-white shadow-2xl mb-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[300px]">
-            <div className="lg:col-span-7 p-8 sm:p-12 flex flex-col justify-between relative z-10">
-              <div className="space-y-3.5">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-amber-300 text-xs font-semibold uppercase tracking-wider">
+        {/* Category Hero Banner (Tightly Proportional) */}
+        <div className="relative rounded-3xl sm:rounded-[32px] overflow-hidden bg-gradient-to-r from-[#4a196d] to-[#340f4e] text-white shadow-xl mb-8 sm:mb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[200px] sm:min-h-[260px]">
+            <div className="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-between relative z-10">
+              <div className="space-y-2.5">
+                <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-white/10 backdrop-blur-md text-amber-300 text-xs font-semibold uppercase tracking-wider">
                   <Sparkles className="w-3.5 h-3.5" />
                   Cloud9 Handcrafted Collection
                 </div>
 
-                <h1 className="font-serif text-3xl sm:text-5xl font-bold tracking-tight text-white">
+                <h1 className="font-serif text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
                   {category.name}
                 </h1>
 
@@ -69,7 +69,7 @@ export default function CategoryPage({ params }) {
                 </p>
               </div>
 
-              <div className="flex flex-wrap items-center gap-4 mt-6 pt-6 border-t border-white/10 text-xs">
+              <div className="flex flex-wrap items-center gap-3 mt-4 pt-4 border-t border-white/10 text-xs">
                 <span className="text-purple-100 font-medium">
                   {categoryProducts.length} Artisanal items available
                 </span>
@@ -81,7 +81,7 @@ export default function CategoryPage({ params }) {
             </div>
 
             {/* Banner Image */}
-            <div className="lg:col-span-5 relative min-h-[220px] lg:min-h-full">
+            <div className="lg:col-span-5 relative min-h-[160px] sm:min-h-[200px] lg:min-h-full">
               <img
                 src={category.image}
                 alt={category.name}
@@ -95,20 +95,27 @@ export default function CategoryPage({ params }) {
           </div>
         </div>
 
-        {/* Products Grid */}
-        <div className="mb-14">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#1F0F29]">
+        {/* Products Grid: Mobile Horizontal Carousel (1.5-2 cards visible), Desktop Grid */}
+        <div className="mb-12">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
+            <h2 className="font-serif text-xl sm:text-3xl font-bold text-[#1F0F29]">
               Available Delights
             </h2>
-            <span className="text-xs text-stone-500 font-medium">
-              Showing {categoryProducts.length} creations
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="sm:hidden text-[11px] font-semibold text-[#4a196d] bg-[#F6EFFC] px-2.5 py-0.5 rounded-full border border-[#e5d2f2]">
+                Swipe &rarr;
+              </span>
+              <span className="text-xs text-stone-500 font-medium">
+                {categoryProducts.length} creations
+              </span>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+          <div className="flex flex-nowrap overflow-x-auto snap-x hide-scrollbar scrollbar-none gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:overflow-visible sm:pb-0">
             {categoryProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <div key={product.id} className="shrink-0 snap-start w-[76vw] sm:w-auto">
+                <ProductCard product={product} />
+              </div>
             ))}
           </div>
         </div>

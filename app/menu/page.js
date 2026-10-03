@@ -30,24 +30,24 @@ export default function MenuPage() {
   }, [selectedCategory, searchQuery, sortBy]);
 
   return (
-    <div className="py-8 md:py-14 bg-[#FAF7F2] min-h-screen">
+    <div className="py-6 sm:py-12 bg-[#FAF7F2]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#F6EFFC] text-[#4a196d] border border-[#e5d2f2] text-xs font-semibold uppercase tracking-wider mb-3">
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#F6EFFC] text-[#4a196d] border border-[#e5d2f2] text-xs font-semibold uppercase tracking-wider mb-2.5">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Cloud9 Menu Collection</span>
           </div>
           <h1 className="font-serif text-3xl sm:text-5xl font-bold text-[#1F0F29] tracking-tight">
             The Complete Bakery Menu
           </h1>
-          <p className="text-stone-600 text-xs sm:text-sm mt-3 leading-relaxed">
+          <p className="text-stone-600 text-xs sm:text-sm mt-2 sm:mt-3 leading-relaxed">
             All 4 handcrafted collections baked fresh on Cloud9 using 100% French butter, Belgian couverture chocolate, and pure dairy.
           </p>
         </div>
 
         {/* Search & Sort Controls */}
-        <div className="bg-white/90 backdrop-blur-md p-3 sm:p-4 rounded-3xl border border-[#e5d2f2] shadow-sm mb-8 space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between gap-4">
+        <div className="bg-white/90 backdrop-blur-md p-3 sm:p-4 rounded-3xl border border-[#e5d2f2] shadow-sm mb-6 sm:mb-8 space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between gap-4">
           {/* Search box */}
           <div className="relative flex-1 max-w-md">
             <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -84,7 +84,7 @@ export default function MenuPage() {
         </div>
 
         {/* Category Pills (Dynamic Mapping for All Categories) */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-none">
+        <div className="flex items-center gap-2 overflow-x-auto pb-3 sm:pb-4 mb-6 sm:mb-8 hide-scrollbar scrollbar-none">
           <button
             onClick={() => setSelectedCategory("all")}
             className={`px-4 sm:px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
@@ -118,12 +118,12 @@ export default function MenuPage() {
 
         {/* If 'all' selected and no search, group by category for pristine browsing */}
         {selectedCategory === "all" && !searchQuery ? (
-          <div className="space-y-12 sm:space-y-16">
+          <div className="space-y-10 sm:space-y-14">
             {CATEGORIES.map((cat) => {
               const catProducts = PRODUCTS.filter((p) => p.category === cat.id);
 
               return (
-                <section key={cat.id} className="space-y-6">
+                <section key={cat.id} className="space-y-4 sm:space-y-6">
                   {/* Category Title Header */}
                   <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#e5d2f2] pb-3 gap-2">
                     <div>
@@ -138,15 +138,22 @@ export default function MenuPage() {
                         {cat.tagline}
                       </p>
                     </div>
-                    <span className="text-xs font-bold text-stone-400">
-                      {catProducts.length} Items Available
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="sm:hidden text-[11px] font-semibold text-[#4a196d] bg-[#F6EFFC] px-2.5 py-0.5 rounded-full border border-[#e5d2f2]">
+                        Swipe treats &rarr;
+                      </span>
+                      <span className="text-xs font-bold text-stone-400">
+                        {catProducts.length} Items Available
+                      </span>
+                    </div>
                   </div>
 
-                  {/* Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+                  {/* Horizontal Scrolling Carousel on Mobile (1.5-2 cards visible), Desktop Grid */}
+                  <div className="flex flex-nowrap overflow-x-auto snap-x hide-scrollbar scrollbar-none gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:overflow-visible sm:pb-0">
                     {catProducts.map((product) => (
-                      <ProductCard key={product.id} product={product} />
+                      <div key={product.id} className="shrink-0 snap-start w-[76vw] sm:w-auto">
+                        <ProductCard product={product} />
+                      </div>
                     ))}
                   </div>
                 </section>
@@ -162,9 +169,14 @@ export default function MenuPage() {
                   ? `Showing results for "${searchQuery}"`
                   : CATEGORIES.find((c) => c.id === selectedCategory)?.name}
               </h2>
-              <span className="text-xs text-stone-500 font-semibold">
-                {filteredProducts.length} items
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="sm:hidden text-[11px] font-semibold text-[#4a196d] bg-[#F6EFFC] px-2.5 py-0.5 rounded-full border border-[#e5d2f2]">
+                  Swipe &rarr;
+                </span>
+                <span className="text-xs text-stone-500 font-semibold">
+                  {filteredProducts.length} items
+                </span>
+              </div>
             </div>
 
             {filteredProducts.length === 0 ? (
@@ -189,9 +201,11 @@ export default function MenuPage() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+              <div className="flex flex-nowrap overflow-x-auto snap-x hide-scrollbar scrollbar-none gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:overflow-visible sm:pb-0">
                 {filteredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <div key={product.id} className="shrink-0 snap-start w-[76vw] sm:w-auto">
+                    <ProductCard product={product} />
+                  </div>
                 ))}
               </div>
             )}
