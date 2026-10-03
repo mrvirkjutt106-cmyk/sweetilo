@@ -1,4 +1,4 @@
-import { Outfit, Playfair_Display } from "next/font/google";
+import { Outfit, Playfair_Display, Caveat } from "next/font/google";
 import "./globals.css";
 import { BucketProvider } from "@/context/BucketContext";
 import Navbar from "@/components/Navbar";
@@ -17,6 +17,12 @@ const outfit = Outfit({
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",
+  display: "swap",
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  variable: "--font-caveat",
   display: "swap",
 });
 
@@ -44,7 +50,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${outfit.variable} ${playfair.variable}`}>
+    <html lang="en" className={`${outfit.variable} ${playfair.variable} ${caveat.variable}`}>
       <body className="min-h-screen flex flex-col bg-[#FAF7F2] text-stone-900 font-sans antialiased selection:bg-[#4a196d] selection:text-white">
         <BucketProvider>
           <NotificationToast />

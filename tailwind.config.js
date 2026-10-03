@@ -28,6 +28,7 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-outfit)", "system-ui", "sans-serif"],
         serif: ["var(--font-playfair)", "Georgia", "serif"],
+        script: ["var(--font-caveat)", "cursive"],
       },
       boxShadow: {
         glass: "0 8px 32px 0 rgba(74, 25, 109, 0.06)",
