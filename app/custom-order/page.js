@@ -979,7 +979,7 @@ export default function CustomOrderPage() {
                         whileTap={{ scale: 0.99 }}
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full py-4 px-8 rounded-full bg-[#4a196d] hover:bg-[#340f4e] text-white text-sm sm:text-base font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
+                        className="w-full py-4 px-8 rounded-full bg-gradient-to-r from-[#4a196d] via-[#6f22a5] to-[#7e22ce] hover:from-[#3a1357] hover:to-[#6b21a8] text-white text-sm sm:text-base font-bold shadow-vibrant-purple hover:shadow-xl transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
                       >
                         {isSubmitting ? (
                           <>

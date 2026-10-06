@@ -12,18 +12,31 @@ const outfit = Outfit({
   subsets: ["latin"],
   variable: "--font-outfit",
   display: "swap",
+  preload: true,
+  fallback: [
+    "system-ui",
+    "-apple-system",
+    "BlinkMacSystemFont",
+    "Segoe UI",
+    "Roboto",
+    "sans-serif",
+  ],
 });
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",
   display: "swap",
+  preload: true,
+  fallback: ["Playfair Display", "Didot", "Bodoni MT", "Georgia", "serif"],
 });
 
 const caveat = Caveat({
   subsets: ["latin"],
   variable: "--font-caveat",
   display: "swap",
+  preload: true,
+  fallback: ["Caveat", "Brush Script MT", "cursive"],
 });
 
 export const metadata = {

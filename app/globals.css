@@ -4,15 +4,25 @@
 
 :root {
   --background: #FAF7F2;
-  --foreground: #22122B;
+  --foreground: #1B0D24;
   --primary-purple: #4a196d;
+  --radiant-purple: #9333ea;
+  --vibrant-gold: #F59E0B;
+  --lavender-glow: rgba(147, 51, 234, 0.12);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
   overflow-x: hidden;
-  font-family: var(--font-outfit), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-outfit), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
@@ -20,48 +30,158 @@ body {
   color: #ffffff;
 }
 
-/* Glassmorphism custom utilities */
+/* ================= HARDWARE-ACCELERATED GPU LAYERS ================= */
+.gpu-accelerate {
+  transform: translate3d(0, 0, 0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* ================= VIBRANT SHIMMER SKELETON (LOADS INSTANTLY ON 2G/3G) ================= */
+/* Renders a luscious warm confectionery shimmer before images download */
+.vibrant-shimmer {
+  background: linear-gradient(
+    90deg,
+    #F6EFFC 0%,
+    #FFF8F0 25%,
+    #EDE3F7 50%,
+    #FFF8F0 75%,
+    #F6EFFC 100%
+  );
+  background-size: 250% 100%;
+  animation: shimmerFast 1.8s ease-in-out infinite;
+}
+
+/* Low-bandwidth content visibility optimization for offscreen sections */
+.content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 480px;
+}
+
+/* ================= VIBRANT GLASSMORPHISM & AURORA PANELS ================= */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(230, 212, 242, 0.6);
+  border: 1px solid rgba(229, 210, 242, 0.85);
+  box-shadow: 0 10px 32px 0 rgba(74, 25, 109, 0.05);
+}
+
+.glass-vibrant-card {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(229, 210, 242, 0.9);
+  box-shadow: 0 12px 36px -10px rgba(74, 25, 109, 0.09), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+
+.glass-vibrant-card:hover {
+  border-color: rgba(147, 51, 234, 0.45);
+  box-shadow: 0 20px 44px -10px rgba(74, 25, 109, 0.18), 0 0 20px rgba(147, 51, 234, 0.12);
 }
 
 .glass-panel-dark {
-  background: rgba(52, 15, 78, 0.9);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(35, 7, 55, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(229, 210, 242, 0.2);
+  box-shadow: 0 20px 50px rgba(27, 13, 36, 0.5);
 }
 
-.glass-card {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(230, 212, 242, 0.5);
+/* ================= VIBRANT RADIAL GLOWS & AURORA ACCENTS ================= */
+.cloud-aurora {
+  background: radial-gradient(
+    circle at 50% 40%,
+    rgba(147, 51, 234, 0.15) 0%,
+    rgba(245, 158, 11, 0.08) 35%,
+    rgba(230, 212, 242, 0.15) 60%,
+    rgba(250, 247, 242, 0) 80%
+  );
 }
 
-/* Cloud glow effect with brand purple */
-.cloud-glow {
-  background: radial-gradient(circle at 50% 50%, rgba(230, 212, 242, 0.45) 0%, rgba(246, 239, 252, 0.35) 45%, rgba(250, 247, 242, 0) 70%);
+.vibrant-glow-purple {
+  box-shadow: 0 0 30px rgba(147, 51, 234, 0.25);
 }
 
+.vibrant-glow-gold {
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
+}
+
+/* ================= VIBRANT GRADIENT TEXT STYLING ================= */
+.vibrant-title-gradient {
+  background: linear-gradient(135deg, #320b4d 0%, #4a196d 40%, #7e22ce 75%, #9333ea 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.vibrant-gold-gradient {
+  background: linear-gradient(135deg, #B45309 0%, #D97706 40%, #F59E0B 75%, #FBBF24 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.vibrant-berry-gradient {
+  background: linear-gradient(135deg, #4a196d 0%, #a21caf 50%, #e11d48 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* Legacy gradient names preserved for safety */
 .purple-gradient-text {
-  background: linear-gradient(135deg, #4a196d 0%, #7d2ca8 100%);
+  background: linear-gradient(135deg, #4a196d 0%, #7e22ce 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .gold-gradient-text {
-  background: linear-gradient(135deg, #4a196d 0%, #C67D24 100%);
+  background: linear-gradient(135deg, #4a196d 0%, #D97706 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Custom smooth scrollbar */
+/* ================= VIBRANT PILL & BADGE GRAPHICS ================= */
+.badge-signature {
+  background: linear-gradient(135deg, #4a196d 0%, #7e22ce 60%, #9333ea 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 15px -2px rgba(126, 34, 206, 0.4);
+}
+
+.badge-bestseller {
+  background: linear-gradient(135deg, #320b4d 0%, #4a196d 50%, #C67D24 100%);
+  color: #FDE68A;
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  box-shadow: 0 4px 14px -2px rgba(245, 158, 11, 0.3);
+}
+
+.badge-fresh {
+  background: linear-gradient(135deg, #065F46 0%, #059669 100%);
+  color: #ECFDF5;
+  box-shadow: 0 4px 12px -2px rgba(5, 150, 105, 0.3);
+}
+
+/* ================= ULTRA-LIGHTWEIGHT CSS ANIMATION CLASSES ================= */
+/* These trigger immediately without waiting for JS bundle download on slow 2G/3G */
+.animate-enter-fade {
+  animation: fadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-float-cloud {
+  animation: floatGentle 5s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: vibrantGlow 3.5s ease-in-out infinite;
+}
+
+/* ================= SMOOTH SCROLLBAR ================= */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
@@ -69,15 +189,15 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #E5D2F2;
-  border-radius: 4px;
+  background: #D8B4FE;
+  border-radius: 9999px;
+  border: 2px solid #FAF7F2;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #4a196d;
+  background: #7e22ce;
 }
 
-/* Hide scrollbar utility for mobile carousels */
 .hide-scrollbar::-webkit-scrollbar,
 .scrollbar-none::-webkit-scrollbar {
   display: none;
@@ -88,3 +208,14 @@ body {
   scrollbar-width: none;
 }
 
+/* ================= ACCESSIBILITY: REDUCED MOTION ================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

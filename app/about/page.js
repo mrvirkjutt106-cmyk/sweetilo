@@ -25,8 +25,8 @@ export default function AboutPage() {
             COTHM Certified Baker & Artisan
           </div>
 
-          <h1 className="font-serif text-4xl sm:text-6xl font-bold text-[#1F0F29] tracking-tight leading-tight">
-            The Story Behind <span className="text-[#4a196d] italic">Sweetilo</span>
+          <h1 className="font-serif text-4xl sm:text-6xl font-bold text-[#1B0D24] tracking-tight leading-tight">
+            The Story Behind <span className="vibrant-title-gradient">Sweetilo</span>
           </h1>
 
           <p className="text-stone-600 text-sm sm:text-base mt-4 leading-relaxed font-sans max-w-2xl mx-auto">
@@ -39,7 +39,7 @@ export default function AboutPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-white rounded-[36px] border border-[#e5d2f2] p-8 sm:p-14 shadow-card mb-16 relative overflow-hidden"
+          className="bg-white rounded-[36px] border border-purple-200/90 p-8 sm:p-14 shadow-card mb-16 relative overflow-hidden"
         >
           {/* Subtle watermark / glow */}
           <div className="absolute -top-16 -right-16 w-64 h-64 bg-[#F6EFFC] rounded-full blur-3xl pointer-events-none" />
@@ -47,13 +47,14 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
             {/* Left: Image / Certificate Badge */}
             <div className="lg:col-span-5 relative">
-              <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-[#FAF7F2] relative">
+              <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-[#FAF7F2] relative vibrant-shimmer">
                 <img
                   src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80"
                   alt="Artisanal Bakery Craft"
                   className="w-full h-80 sm:h-96 object-cover"
+                  loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1F0F29]/70 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1B0D24]/75 via-transparent to-transparent pointer-events-none" />
                 <div className="absolute bottom-4 left-4 right-4 text-white">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-amber-300 block">
                     Certified Professional
@@ -65,39 +66,40 @@ export default function AboutPage() {
               </div>
 
               {/* Floating Heart Quote */}
-              <div className="absolute -bottom-5 -right-3 bg-[#4a196d] text-white p-3 rounded-2xl shadow-xl flex items-center gap-2 border border-purple-300/30">
+              <div className="absolute -bottom-5 -right-3 bg-gradient-to-r from-[#4a196d] to-[#7e22ce] text-white p-3.5 rounded-2xl shadow-xl flex items-center gap-2 border border-purple-300/40">
                 <Heart className="w-4 h-4 fill-amber-300 text-amber-300" />
-                <span className="text-xs font-semibold">100% Homemade Touch</span>
+                <span className="text-xs font-bold">100% Homemade Touch</span>
               </div>
             </div>
 
             {/* Right: Personal Introduction */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="w-12 h-12 rounded-2xl bg-[#F6EFFC] flex items-center justify-center text-[#4a196d]">
-                <Sparkles className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-2xl bg-[#F6EFFC] flex items-center justify-center text-[#7e22ce]">
+                <Sparkles className="w-6 h-6 text-[#9333ea]" />
               </div>
 
-              <blockquote className="font-serif text-xl sm:text-2xl text-[#1F0F29] leading-relaxed italic">
+              <blockquote className="font-serif text-xl sm:text-2xl text-[#1B0D24] leading-relaxed italic">
                 &ldquo;Hi, I’m a COTHM Certified Baker. But more than a title, I’m someone with a dream. A dream of creating a little haven for all the sweet tooths out there. A place where it’s not just about cake, pastry, or dessert. It’s about a spoonful of joy. A taste of home. And love, baked into every layer.&rdquo;
               </blockquote>
 
               <div className="pt-2 border-t border-stone-100 flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-[#4a196d] text-white flex items-center justify-center font-serif font-bold text-sm">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#4a196d] to-[#7e22ce] text-white flex items-center justify-center font-serif font-bold text-sm shadow-sm">
                   SW
                 </div>
                 <div>
-                  <h4 className="font-bold text-sm text-[#1F0F29]">Founder & Head Baker</h4>
-                  <p className="text-xs text-[#4a196d] font-semibold">Sweetilo Cloud Bakehouse</p>
+                  <h4 className="font-bold text-sm text-[#1B0D24]">Founder & Head Baker</h4>
+                  <p className="text-xs text-[#7e22ce] font-bold">Sweetilo Cloud Bakehouse</p>
                 </div>
               </div>
             </div>
           </div>
         </motion.div>
 
-        {/* The Full Vision Section (Exact Prompt Text) */}
-        <section className="bg-gradient-to-br from-[#4a196d] via-[#371052] to-[#4a196d] rounded-[36px] p-8 sm:p-16 text-white shadow-2xl mb-16 relative overflow-hidden">
+        {/* The Full Vision Section */}
+        <section className="bg-gradient-to-br from-[#230737] via-[#4a196d] to-[#7e22ce] rounded-[36px] p-8 sm:p-16 text-white shadow-2xl mb-16 relative overflow-hidden ring-1 ring-purple-300/20">
           <div className="max-w-3xl mx-auto space-y-6 relative z-10 text-center sm:text-left">
-            <span className="text-xs uppercase tracking-widest text-amber-300 font-bold block">
+            <span className="text-xs uppercase tracking-widest text-amber-300 font-bold block flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
               Our Guiding Philosophy
             </span>
 
