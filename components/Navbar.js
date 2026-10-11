@@ -140,12 +140,12 @@ export default function Navbar() {
                 )}
               </button>
 
-              {/* Pill CTA — Order on WhatsApp */}
+              {/* Pill CTA — Order on WhatsApp (strictly hidden on mobile, shown on md+) */}
               <a
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="pill-btn hidden md:inline-flex bg-[#4a196d] hover:bg-[#5c1b89] text-white shadow-[0_6px_20px_rgba(74,25,109,0.30)] text-xs sm:text-[13px] tracking-wide"
+                className="pill-btn !hidden md:!inline-flex bg-[#4a196d] hover:bg-[#5c1b89] text-white shadow-[0_6px_20px_rgba(74,25,109,0.30)] text-xs sm:text-[13px] tracking-wide"
               >
                 <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current text-emerald-300 shrink-0" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.63C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 6.46 17.5 2 12.04 2ZM12.04 20.16C10.59 20.16 9.17 19.77 7.93 19.03L7.63 18.85L4.51 19.67L5.34 16.63L5.15 16.32C4.34 15.03 3.91 13.51 3.91 11.91C3.91 7.43 7.56 3.78 12.05 3.78C14.22 3.78 16.26 4.63 17.79 6.16C19.32 7.7 20.17 9.74 20.17 11.92C20.16 16.4 16.52 20.16 12.04 20.16Z"/>

@@ -286,47 +286,50 @@ body {
   stroke-dashoffset: 0;
 }
 
-/* ---- Pill button: hover lift + arrow nudge ---- */
-.pill-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.75rem;
-  border-radius: 9999px;
-  font-weight: 800;
-  font-size: 0.875rem;
-  transition: transform 0.22s cubic-bezier(0.16,1,0.3,1),
-              box-shadow 0.22s cubic-bezier(0.16,1,0.3,1);
-  will-change: transform;
-}
-.pill-btn:hover  { transform: translateY(-2px); }
-.pill-btn:active { transform: scale(0.97); }
-.pill-btn .pill-arrow {
-  transition: transform 0.22s ease;
-}
-.pill-btn:hover .pill-arrow { transform: translateX(4px); }
+/* ---- Component styles (properly layered so Tailwind utility classes can override them) ---- */
+@layer components {
+  /* Pill button: hover lift + arrow nudge */
+  .pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 9999px;
+    font-weight: 800;
+    font-size: 0.875rem;
+    transition: transform 0.22s cubic-bezier(0.16,1,0.3,1),
+                box-shadow 0.22s cubic-bezier(0.16,1,0.3,1);
+    will-change: transform;
+  }
+  .pill-btn:hover  { transform: translateY(-2px); }
+  .pill-btn:active { transform: scale(0.97); }
+  .pill-btn .pill-arrow {
+    transition: transform 0.22s ease;
+  }
+  .pill-btn:hover .pill-arrow { transform: translateX(4px); }
 
-/* ---- Product card: lift + image scale + arrow color on hover ---- */
-.artisan-card {
-  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1),
-              box-shadow 0.3s cubic-bezier(0.16,1,0.3,1);
-  will-change: transform;
-}
-.artisan-card:hover { transform: translateY(-6px); }
-.artisan-card:hover .card-img {
-  transform: scale(1.05) rotate(2deg);
-}
-.artisan-card .card-img {
-  transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
-  will-change: transform;
-}
-.artisan-card:hover .card-arrow-btn {
-  background-color: #E0A94A;
-  color: #230737;
-  transform: translateX(3px);
-}
-.card-arrow-btn {
-  transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+  /* Product card: lift + image scale + arrow color on hover */
+  .artisan-card {
+    transition: transform 0.3s cubic-bezier(0.16,1,0.3,1),
+                box-shadow 0.3s cubic-bezier(0.16,1,0.3,1);
+    will-change: transform;
+  }
+  .artisan-card:hover { transform: translateY(-6px); }
+  .artisan-card:hover .card-img {
+    transform: scale(1.05) rotate(2deg);
+  }
+  .artisan-card .card-img {
+    transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
+    will-change: transform;
+  }
+  .artisan-card:hover .card-arrow-btn {
+    background-color: #E0A94A;
+    color: #230737;
+    transform: translateX(3px);
+  }
+  .card-arrow-btn {
+    transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+  }
 }
 
 /* ---- Wave divider positioning ---- */

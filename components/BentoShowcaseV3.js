@@ -51,7 +51,7 @@ export default function BentoShowcaseV3() {
         </svg>
       </div>
 
-      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 relative z-10">
 
         {/* ---- Section Header ---- */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-14 gap-4 reveal" ref={(el) => { if (el) { const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { el.classList.add('is-visible'); obs.disconnect(); } }, { threshold: 0.2 }); obs.observe(el); } }}>
@@ -91,7 +91,7 @@ export default function BentoShowcaseV3() {
         </div>
 
         {/* ---- 4-col Grid (2×2 on mobile, 4-col on desktop) ---- */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6">
           {CATEGORIES.map((cat, idx) => {
             return (
               <div
