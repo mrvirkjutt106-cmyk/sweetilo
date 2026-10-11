@@ -115,9 +115,9 @@ export default function CategoryPage({ params }) {
             </div>
           </div>
 
-          <div className="flex flex-nowrap overflow-x-auto snap-x hide-scrollbar scrollbar-none gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:overflow-visible sm:pb-0">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
             {categoryProducts.map((product) => (
-              <div key={product.id} className="shrink-0 snap-start w-[76vw] sm:w-auto">
+              <div key={product.id}>
                 <ProductCard product={product} />
               </div>
             ))}

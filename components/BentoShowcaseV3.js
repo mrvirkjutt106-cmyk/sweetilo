@@ -97,8 +97,8 @@ export default function BentoShowcaseV3() {
           </span>
         </div>
 
-        {/* ---- 4-col Grid (2×2 on mobile) ---- */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        {/* ---- 4-col Grid (2×2 on mobile, 4-col on desktop) ---- */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {CATEGORIES.map((cat, idx) => {
             const isLoaded = loadedImages[cat.id];
             return (
@@ -109,11 +109,11 @@ export default function BentoShowcaseV3() {
               >
                 <Link
                   href={`/category/${cat.slug}`}
-                  className="block rounded-[24px] sm:rounded-[28px] overflow-hidden border border-purple-200/70 bg-white shadow-[0_8px_30px_rgba(74,25,109,0.06)] hover:shadow-[0_16px_40px_rgba(74,25,109,0.14)] hover:border-[#9333ea]/40 transition-all duration-300"
+                  className="block rounded-[20px] sm:rounded-[28px] overflow-hidden border border-purple-200/70 bg-white shadow-[0_6px_24px_rgba(74,25,109,0.06)] hover:shadow-[0_16px_40px_rgba(74,25,109,0.14)] hover:border-[#9333ea]/40 transition-all duration-300"
                   aria-label={`Explore ${cat.name}`}
                 >
-                  {/* Colored tile background + image */}
-                  <div className={`relative h-44 sm:h-52 lg:h-56 overflow-hidden ${TILE_COLORS[idx]}`}>
+                  {/* Colored tile background + image with 4:3 aspect ratio */}
+                  <div className={`relative aspect-[4/3] w-full overflow-hidden ${TILE_COLORS[idx]}`}>
                     {/* Shimmer placeholder */}
                     {!isLoaded && <div className="absolute inset-0 vibrant-shimmer" />}
 
@@ -128,20 +128,20 @@ export default function BentoShowcaseV3() {
                     />
 
                     {/* Circular arrow button bottom-right */}
-                    <div className="card-arrow-btn absolute bottom-3 right-3 w-9 h-9 rounded-full bg-white text-[#4a196d] border border-purple-200/70 flex items-center justify-center shadow-sm z-10">
-                      <ArrowRight className="w-4 h-4" />
+                    <div className="card-arrow-btn absolute bottom-2.5 right-2.5 sm:bottom-3 sm:right-3 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white text-[#4a196d] border border-purple-200/70 flex items-center justify-center shadow-sm z-10">
+                      <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </div>
                   </div>
 
                   {/* Card footer */}
-                  <div className="px-4 py-3.5">
-                    <h3 className="font-sans text-sm sm:text-base font-extrabold text-[#1B0D24] group-hover:text-[#4a196d] transition-colors leading-tight">
+                  <div className="p-3 sm:px-4 sm:py-3.5">
+                    <h3 className="font-sans text-xs sm:text-base font-extrabold text-[#1B0D24] group-hover:text-[#4a196d] transition-colors leading-tight">
                       {cat.name}
                     </h3>
-                    <p className="text-[11px] sm:text-xs text-stone-500 mt-1 line-clamp-2 leading-snug">
+                    <p className="text-[10px] sm:text-xs text-stone-500 mt-0.5 sm:mt-1 line-clamp-2 leading-snug">
                       {cat.tagline}
                     </p>
-                    <p className="text-[10px] font-bold text-[#4a196d] mt-2 uppercase tracking-wider">
+                    <p className="text-[9px] sm:text-[10px] font-bold text-[#4a196d] mt-1.5 sm:mt-2 uppercase tracking-wider">
                       {cat.itemCount} items →
                     </p>
                   </div>

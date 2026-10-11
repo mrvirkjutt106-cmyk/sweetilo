@@ -185,16 +185,16 @@ export default function MockupHeroSection() {
               </div>
 
               {/* Feature icons row with dividers */}
-              <div className="hero-slide-up hero-slide-up-5 flex items-center gap-0 pt-3 border-t border-purple-100/80 flex-wrap">
+              <div className="hero-slide-up hero-slide-up-5 grid grid-cols-3 gap-2 sm:flex sm:items-center sm:gap-0 pt-4 border-t border-purple-100/80">
                 {features.map((feat, i) => (
                   <React.Fragment key={feat.label}>
-                    <div className="flex items-center gap-2.5 px-4 py-2 first:pl-0">
-                      <div className="w-9 h-9 rounded-full bg-[#F6EFFC] text-[#4a196d] flex items-center justify-center shrink-0">
+                    <div className="flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-1.5 sm:gap-2.5 sm:px-4 py-1.5 first:sm:pl-0">
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#F6EFFC] text-[#4a196d] flex items-center justify-center shrink-0">
                         {feat.icon}
                       </div>
-                      <div>
-                        <p className="text-[12px] font-bold text-[#1B0D24] leading-tight">{feat.label}</p>
-                        <p className="text-[11px] text-stone-500 leading-tight">{feat.sub}</p>
+                      <div className="min-w-0">
+                        <p className="text-[10.5px] sm:text-[12px] font-bold text-[#1B0D24] leading-tight">{feat.label}</p>
+                        <p className="hidden sm:block text-[11px] text-stone-500 leading-tight">{feat.sub}</p>
                       </div>
                     </div>
                     {i < features.length - 1 && (

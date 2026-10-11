@@ -31,7 +31,7 @@ export default function Navbar() {
     { name: "About Us", href: "/about" },
     { name: "Our Menu", href: "/menu" },
     { name: "Custom Orders", href: "/custom-order" },
-    { name: "Reviews", href: "/#reviews" },
+    { name: "Reviews", href: "/reviews" },
     {
       name: "Contact Us",
       href: `https://wa.me/${WHATSAPP_NUMBER}`,
@@ -62,26 +62,26 @@ export default function Navbar() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20 lg:grid lg:grid-cols-3 lg:gap-4">
+          <div className="flex items-center justify-between h-20 gap-2 sm:gap-4 lg:gap-6">
             {/* Left: Logo */}
             <Link href="/" className="flex items-center group shrink-0">
               <Image
                 src="/Official Logo.png"
                 alt="Sweetilo — Baked on Cloud9, delivered to your heart"
-                width={200}
-                height={64}
+                width={190}
+                height={60}
                 priority
-                className="h-12 sm:h-14 w-auto object-contain transition-transform duration-250 group-hover:scale-[1.02]"
+                className="h-11 sm:h-13 w-auto object-contain transition-transform duration-250 group-hover:scale-[1.02]"
               />
             </Link>
 
-            {/* Center: Nav Links (Desktop only) */}
-            <nav className="hidden lg:flex items-center justify-center gap-6 xl:gap-8">
+            {/* Center: Nav Links (Desktop only, single-line whitespace-nowrap) */}
+            <nav className="hidden lg:flex items-center justify-center gap-3.5 xl:gap-7 flex-1 px-2 min-w-0">
               {navLinks.map((link) => {
                 const isActive =
                   link.href === "/"
                     ? pathname === "/"
-                    : !link.isExternal && pathname.startsWith(link.href);
+                    : !link.isExternal && (pathname === link.href || pathname.startsWith(link.href + "/"));
 
                 if (link.isExternal) {
                   return (
@@ -90,7 +90,7 @@ export default function Navbar() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[13px] font-semibold text-stone-600 hover:text-[#4a196d] transition-colors"
+                      className="text-[13px] xl:text-[14px] font-semibold text-stone-600 hover:text-[#4a196d] transition-colors whitespace-nowrap px-1 py-1"
                     >
                       {link.name}
                     </a>
@@ -101,7 +101,7 @@ export default function Navbar() {
                   <Link
                     key={link.name}
                     href={link.href}
-                    className={`text-[13px] font-semibold transition-all relative py-1 ${
+                    className={`text-[13px] xl:text-[14px] font-semibold transition-all relative px-1 py-1 whitespace-nowrap ${
                       isActive
                         ? "text-[#4a196d] font-bold"
                         : "text-stone-600 hover:text-[#4a196d]"
@@ -117,7 +117,7 @@ export default function Navbar() {
             </nav>
 
             {/* Right: Icons + CTA */}
-            <div className="flex items-center justify-end gap-2 sm:gap-3">
+            <div className="flex items-center justify-end gap-2 sm:gap-3 shrink-0">
               {/* Search icon */}
               <button
                 className="hidden sm:flex p-2.5 rounded-full text-stone-500 hover:text-[#4a196d] hover:bg-[#F6EFFC] transition-all"

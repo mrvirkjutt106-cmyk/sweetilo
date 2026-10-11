@@ -53,10 +53,9 @@ body {
   animation: shimmerFast 1.8s ease-in-out infinite;
 }
 
-/* Low-bandwidth content visibility optimization for offscreen sections */
+/* Ensure offscreen sections are always rendered reliably without scroll popping or blank frames */
 .content-auto {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 480px;
+  content-visibility: visible;
 }
 
 /* ================= VIBRANT GLASSMORPHISM & AURORA PANELS ================= */
@@ -222,22 +221,23 @@ body {
 
 /* ================= ARTISAN BAKERY RESTYLING — NEW UTILITIES ================= */
 
-/* ---- Scroll-reveal: elements start hidden, JS adds .is-visible ---- */
+/* ---- Scroll-reveal: progressive enhancement ---- */
 .reveal {
-  opacity: 0;
-  transform: translate3d(0, 28px, 0);
-  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
-}
-.reveal.is-visible {
   opacity: 1;
   transform: translate3d(0, 0, 0);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
 }
-.reveal-delay-1 { transition-delay: 0.08s; }
-.reveal-delay-2 { transition-delay: 0.16s; }
-.reveal-delay-3 { transition-delay: 0.24s; }
-.reveal-delay-4 { transition-delay: 0.32s; }
+.reveal.is-visible,
+.is-visible .reveal {
+  opacity: 1 !important;
+  transform: translate3d(0, 0, 0) !important;
+}
+.reveal-delay-1 { transition-delay: 0.06s; }
+.reveal-delay-2 { transition-delay: 0.12s; }
+.reveal-delay-3 { transition-delay: 0.18s; }
+.reveal-delay-4 { transition-delay: 0.24s; }
 
 /* ---- Blob slow float + subtle rotate ---- */
 @keyframes blobFloat {

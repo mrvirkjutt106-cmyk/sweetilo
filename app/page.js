@@ -17,9 +17,17 @@ const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent
   "Hi Sweetilo! I'd like to order some fresh treats."
 )}`;
 
-// Scroll-reveal hook — adds .is-visible to refs when they enter viewport
-function useScrollReveal(refs, options = {}) {
+// Robust scroll-reveal hook — ensures all .reveal elements are observed and guaranteed to be visible
+function useScrollReveal() {
   useEffect(() => {
+    const elements = document.querySelectorAll(".reveal");
+    if (!elements.length) return;
+
+    if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
+      elements.forEach((el) => el.classList.add("is-visible"));
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -29,10 +37,20 @@ function useScrollReveal(refs, options = {}) {
           }
         });
       },
-      { threshold: 0.1, ...options }
+      { threshold: 0.05, rootMargin: "60px 0px" }
     );
-    refs.forEach((ref) => { if (ref.current) observer.observe(ref.current); });
-    return () => observer.disconnect();
+
+    elements.forEach((el) => observer.observe(el));
+
+    // Failsafe: reveal everything after 500ms so content is never stuck
+    const timer = setTimeout(() => {
+      elements.forEach((el) => el.classList.add("is-visible"));
+    }, 500);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(timer);
+    };
   }, []);
 }
 
@@ -68,16 +86,7 @@ export default function HomePage() {
     PRODUCTS.find((p) => p.id === "drink-02"),
   ].filter(Boolean);
 
-  // Refs for scroll-reveal
-  const storyRef    = useRef(null);
-  const ctaRef      = useRef(null);
-  const reviewsRef  = useRef(null);
-  const showcaseRef = useRef(null);
-  const bestsellRef = useRef(null);
-  useScrollReveal([storyRef, ctaRef, reviewsRef, showcaseRef, bestsellRef]);
-
-  // WHATSAPP_URL is defined at module level using env var + encodeURIComponent
-
+  useScrollReveal();
 
   return (
     <div className="relative overflow-hidden bg-[#FAF7F2]">
@@ -89,7 +98,7 @@ export default function HomePage() {
       <BentoShowcaseV3 />
 
       {/* ===== 3. TRENDING BESTSELLERS ===== */}
-      <section className="py-14 sm:py-20 bg-white relative content-auto">
+      <section className="py-14 sm:py-20 bg-white relative">
         {/* Decorative blob */}
         <div aria-hidden="true" className="absolute top-0 left-0 w-64 h-64 pointer-events-none opacity-40">
           <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" className="w-full h-full animate-blob-slow">
@@ -97,28 +106,28 @@ export default function HomePage() {
           </svg>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" ref={bestsellRef}>
-          <div className="reveal flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="reveal flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-10 gap-3">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-[#4a196d] mb-2">— Cloud9 Top Picks</p>
-              <h2 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#1B0D24] leading-tight">
+              <h2 className="font-sans text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#1B0D24] leading-tight">
                 Trending{" "}
                 <span className="text-[#4a196d] font-script font-normal text-3xl sm:text-4xl">Bestsellers</span>
               </h2>
             </div>
             <Link
               href="/menu"
-              className="inline-flex items-center gap-1.5 text-sm font-bold text-[#4a196d] hover:text-[#7e22ce] transition-colors group shrink-0 self-start sm:self-auto"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#4a196d] hover:text-[#7e22ce] transition-colors group shrink-0 self-start sm:self-auto"
             >
               <span>View Full Menu</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
-          {/* Horizontal scroll on mobile, 4-col grid on desktop */}
-          <div className="flex flex-nowrap overflow-x-auto snap-x hide-scrollbar gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0">
+          {/* 2-col on mobile, 4-col on desktop — desktop quality cards with proportional aspect ratio */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {bestsellers.map((product, i) => (
-              <div key={product.id} className={`shrink-0 snap-start w-[76vw] sm:w-auto reveal reveal-delay-${i + 1}`}>
+              <div key={product.id} className={`reveal reveal-delay-${i + 1}`}>
                 <ProductCard product={product} />
               </div>
             ))}
@@ -127,7 +136,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== 4. STORY BANNER (full-width wavy dark section) ===== */}
-      <section className="relative py-20 sm:py-28 bg-[#4a196d] overflow-hidden content-auto" ref={storyRef}>
+      <section className="relative py-20 sm:py-28 bg-[#4a196d] overflow-hidden">
         {/* Wave top */}
         <WaveDivider flip={false} fill="#4a196d" />
 
@@ -190,7 +199,7 @@ export default function HomePage() {
                 </svg>
               </div>
 
-              <div className="relative w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[400px] rounded-[28px] overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.35)] border-2 border-white/20 lg:translate-y-10">
+              <div className="relative w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[400px] aspect-[4/3] rounded-[28px] overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.35)] border-2 border-white/20 lg:translate-y-10">
                 <img
                   src="/artisan-cookies.jpg"
                   alt="Freshly baked artisan cookies — Sweetilo Cloud9"
@@ -217,7 +226,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== 5. SECONDARY SHOWCASE — Crafted for Every Moment ===== */}
-      <section className="py-14 sm:py-20 bg-[#FAF7F2] content-auto" ref={showcaseRef}>
+      <section className="py-14 sm:py-20 bg-[#FAF7F2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Header */}
@@ -242,40 +251,11 @@ export default function HomePage() {
             </Link>
           </div>
 
-          {/* Desktop: 4-col row. Mobile: vertical list with thumbnail left */}
-          <div className="hidden sm:grid grid-cols-2 lg:grid-cols-4 gap-5">
+          {/* 2-col on mobile, 4-col on desktop — desktop quality product cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {showcaseItems.map((product, i) => (
               <div key={product.id} className={`reveal reveal-delay-${i + 1}`}>
                 <ProductCard product={product} />
-              </div>
-            ))}
-          </div>
-
-          {/* Mobile: list style */}
-          <div className="sm:hidden space-y-3">
-            {showcaseItems.map((product, i) => (
-              <div
-                key={product.id}
-                className={`reveal reveal-delay-${i + 1} flex items-center gap-4 bg-white rounded-2xl p-3 border border-purple-200/60 shadow-sm`}
-              >
-                <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0 bg-[#F6EFFC]">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[11px] font-bold uppercase tracking-wider text-[#4a196d] mb-0.5">{product.categoryName}</p>
-                  <h4 className="font-bold text-sm text-[#1B0D24] line-clamp-2 leading-tight">{product.name}</h4>
-                  {product.price && (
-                    <p className="text-sm font-extrabold text-[#4a196d] mt-1">₨{product.price.toLocaleString()}</p>
-                  )}
-                </div>
-                <div className="card-arrow-btn w-9 h-9 rounded-full bg-[#F6EFFC] text-[#4a196d] border border-purple-200/70 flex items-center justify-center shrink-0">
-                  <ArrowRight className="w-4 h-4" />
-                </div>
               </div>
             ))}
           </div>
@@ -283,21 +263,30 @@ export default function HomePage() {
       </section>
 
       {/* ===== 6. TESTIMONIALS ===== */}
-      <section id="reviews" className="py-14 sm:py-20 bg-white relative content-auto" ref={reviewsRef}>
+      <section id="reviews" className="py-14 sm:py-20 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="reveal text-center mb-10 sm:mb-14">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#4a196d] mb-2">— Customer Love</p>
-            <h2 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#1B0D24]">
-              Loved Across{" "}
-              <span className="text-[#4a196d]">Pakistan</span>
-            </h2>
+          <div className="reveal flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-12 gap-3">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-[#4a196d] mb-2">— Customer Love</p>
+              <h2 className="font-sans text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#1B0D24]">
+                Loved Across{" "}
+                <span className="text-[#4a196d]">Pakistan</span>
+              </h2>
+            </div>
+            <Link
+              href="/reviews"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#4a196d] hover:text-[#7e22ce] transition-colors group shrink-0 self-start sm:self-auto"
+            >
+              <span>View All & Leave a Review</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
 
-          <div className="flex flex-nowrap overflow-x-auto snap-x hide-scrollbar gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 md:grid md:grid-cols-2 lg:grid-cols-4 md:overflow-visible md:pb-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {TESTIMONIALS.map((item, idx) => (
               <div
                 key={idx}
-                className={`shrink-0 snap-start w-[78vw] sm:w-[50vw] md:w-auto bg-[#FAF7F2] p-6 rounded-3xl border border-purple-200/60 shadow-[0_4px_20px_rgba(74,25,109,0.06)] hover:shadow-[0_10px_30px_rgba(74,25,109,0.12)] hover:border-purple-300 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between`}
+                className={`reveal reveal-delay-${idx + 1} bg-[#FAF7F2] p-5 sm:p-6 rounded-3xl border border-purple-200/60 shadow-[0_4px_20px_rgba(74,25,109,0.06)] hover:shadow-[0_10px_30px_rgba(74,25,109,0.12)] hover:border-purple-300 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between`}
               >
                 <div>
                   <div className="flex items-center text-amber-400 mb-3 gap-0.5">
@@ -305,16 +294,16 @@ export default function HomePage() {
                       <Star key={i} className="w-4 h-4 fill-[#E0A94A] text-[#E0A94A]" />
                     ))}
                   </div>
-                  <p className="text-stone-600 text-sm italic leading-relaxed mb-5 font-sans">
+                  <p className="text-stone-600 text-xs sm:text-sm italic leading-relaxed mb-5 font-sans">
                     &ldquo;{item.quote}&rdquo;
                   </p>
                 </div>
-                <div className="pt-4 border-t border-purple-100 flex items-center justify-between text-xs">
-                  <div>
-                    <h4 className="font-bold text-[#1B0D24]">{item.author}</h4>
-                    <p className="text-[11px] text-stone-400">{item.city}</p>
+                <div className="pt-4 border-t border-purple-100 flex items-center justify-between text-xs gap-2">
+                  <div className="min-w-0">
+                    <h4 className="font-bold text-[#1B0D24] truncate">{item.author}</h4>
+                    <p className="text-[11px] text-stone-400 truncate">{item.city}</p>
                   </div>
-                  <span className="text-[10px] bg-[#F6EFFC] text-[#4a196d] font-bold px-2.5 py-1 rounded-full border border-purple-200/80 shadow-xs max-w-[120px] text-right leading-tight">
+                  <span className="text-[10px] bg-[#F6EFFC] text-[#4a196d] font-bold px-2.5 py-1 rounded-full border border-purple-200/80 shadow-xs max-w-[120px] text-right leading-tight shrink-0">
                     {item.item}
                   </span>
                 </div>
@@ -325,7 +314,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== 7. FINAL CTA BANNER (wavy primary strip) ===== */}
-      <section className="relative py-16 sm:py-24 bg-[#4a196d] overflow-hidden content-auto" ref={ctaRef}>
+      <section className="relative py-16 sm:py-24 bg-[#4a196d] overflow-hidden">
         <WaveDivider flip={false} fill="#4a196d" />
 
         {/* Background glows */}

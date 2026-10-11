@@ -148,10 +148,10 @@ export default function MenuPage() {
                     </div>
                   </div>
 
-                  {/* Horizontal Scrolling Carousel on Mobile, Desktop Grid */}
-                  <div className="flex flex-nowrap overflow-x-auto snap-x hide-scrollbar scrollbar-none gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:overflow-visible sm:pb-0">
+                  {/* 2-col on mobile, 4-col on desktop — desktop quality card grid */}
+                  <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
                     {catProducts.map((product) => (
-                      <div key={product.id} className="shrink-0 snap-start w-[76vw] sm:w-auto">
+                      <div key={product.id}>
                         <ProductCard product={product} />
                       </div>
                     ))}
@@ -201,9 +201,9 @@ export default function MenuPage() {
                 </button>
               </div>
             ) : (
-              <div className="flex flex-nowrap overflow-x-auto snap-x hide-scrollbar scrollbar-none gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:overflow-visible sm:pb-0">
+              <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
                 {filteredProducts.map((product) => (
-                  <div key={product.id} className="shrink-0 snap-start w-[76vw] sm:w-auto">
+                  <div key={product.id}>
                     <ProductCard product={product} />
                   </div>
                 ))}
