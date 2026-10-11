@@ -56,7 +56,7 @@ const INITIAL_REVIEWS = [
   {
     id: "verified-init-6",
     author: "Omar Farooq",
-    city: "DHA Phase 6, Karachi",
+    city: "DHA Phase 6, Lahore",
     rating: 5,
     item: "NYC Dark Chocolate Lava Cookie",
     category: "cookies",
@@ -70,7 +70,7 @@ const INITIAL_REVIEWS = [
   {
     id: "verified-init-7",
     author: "Mehwish Riaz",
-    city: "F-10/2, Islamabad",
+    city: "Gulberg III, Lahore",
     rating: 5,
     item: "Classic Italian Tiramisu Cup",
     category: "cups",
@@ -252,7 +252,7 @@ export default function ReviewsPage() {
                 </span>
               </h1>
               <p className="mt-3 text-sm sm:text-base text-stone-600 leading-relaxed">
-                Real feedback from cake lovers, dessert enthusiasts, and celebration hosts across Lahore, Karachi &amp; Islamabad.
+                Real feedback from cake lovers, dessert enthusiasts, and celebration hosts across Lahore.
               </p>
 
               {/* Trust Badges */}
@@ -572,11 +572,11 @@ export default function ReviewsPage() {
                         className="w-full text-xs font-medium px-3.5 py-2.5 rounded-xl border border-purple-200 focus:outline-none focus:ring-2 focus:ring-[#4a196d] bg-white"
                       >
                         <option value="Lahore">Lahore</option>
-                        <option value="Karachi">Karachi</option>
-                        <option value="Islamabad">Islamabad</option>
-                        <option value="Rawalpindi">Rawalpindi</option>
-                        <option value="Faisalabad">Faisalabad</option>
-                        <option value="Other">Other City</option>
+                        <option value="DHA, Lahore">DHA, Lahore</option>
+                        <option value="Gulberg, Lahore">Gulberg, Lahore</option>
+                        <option value="Model Town, Lahore">Model Town, Lahore</option>
+                        <option value="Bahria Town, Lahore">Bahria Town, Lahore</option>
+                        <option value="Johar Town, Lahore">Johar Town, Lahore</option>
                       </select>
                     </div>
                   </div>

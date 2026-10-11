@@ -77,7 +77,7 @@ export default function CategoryPage({ params }) {
                 <span className="text-purple-300">•</span>
                 <span className="text-emerald-300 font-bold flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Same-Day Dispatch in LHE / KHI / ISB
+                  Same-Day Dispatch Across Lahore
                 </span>
               </div>
             </div>

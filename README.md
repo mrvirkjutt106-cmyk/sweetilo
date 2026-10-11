@@ -7,7 +7,7 @@
 
 ## 🌟 Overview
 
-**Sweetilo** is a web application prototype for a high-end homemade cloud bakery operating across **Lahore, Karachi, and Islamabad**. Certified by **COTHM** (College of Tourism & Hotel Management), Sweetilo balances traditional artisanal craftsmanship with a modern digital storefront experience.
+**Sweetilo** is a web application prototype for a high-end homemade cloud bakery operating in **Lahore**. Certified by **COTHM** (College of Tourism & Hotel Management), Sweetilo balances traditional artisanal craftsmanship with a modern digital storefront experience.
 
 ---
 
@@ -22,7 +22,7 @@
 ### 2. Bespoke Custom Order Studio (`/custom-order`)
 - Comprehensive design & quote request form:
   - Full Name & WhatsApp-preferred Contact Number
-  - Delivery Address with City Hub Selector (Lahore, Karachi, Islamabad)
+  - Delivery Address across Lahore
   - Desired Delivery Date with calendar picker and minimum 3-day notice validation
   - Desired Delivery Time slot presets & custom time
   - Product Type dropdown (Cakes, Cupcakes, Dessert Cups, Cookie Platters, Dessert Tables)

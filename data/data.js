@@ -639,7 +639,7 @@ export const TESTIMONIALS = [
     quote:
       "These NYC cookies are as thick and molten as the ones I had in Manhattan. Absolutely the best bakery delivery in Pakistan.",
     author: "Hamza Tariq",
-    city: "Clifton, Karachi",
+    city: "Gulberg, Lahore",
     rating: 5,
     item: "Molten NYC Chunk Cookie",
   },
@@ -647,7 +647,7 @@ export const TESTIMONIALS = [
     quote:
       "The Saffron Tres Leches tub is so light it melts instantly. Ordering on WhatsApp was lightning fast and packaging was pristine.",
     author: "Amina Khan",
-    city: "F-7, Islamabad",
+    city: "Model Town, Lahore",
     rating: 5,
     item: "Tres Leches Cloud Tub",
   },

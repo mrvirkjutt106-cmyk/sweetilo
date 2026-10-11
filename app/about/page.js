@@ -180,7 +180,7 @@ export default function AboutPage() {
             Taste the Love in Every Layer
           </h2>
           <p className="text-xs sm:text-sm text-stone-500 max-w-md mx-auto mb-6">
-            Explore our artisanal collections handcrafted fresh for Lahore, Karachi, and Islamabad.
+            Explore our artisanal collections handcrafted fresh daily in Lahore.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4">

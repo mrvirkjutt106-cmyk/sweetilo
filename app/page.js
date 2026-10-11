@@ -173,7 +173,7 @@ export default function HomePage() {
                 &ldquo;More than a title, this is a dream of creating a haven for all the sweet tooths out there. We never compromise on French butter, Belgian chocolate, or freshness.&rdquo;
               </blockquote>
               <p className="text-purple-200 text-xs sm:text-sm leading-relaxed max-w-lg">
-                Every morning, our cloud bakehouse prepares strictly limited micro-batches. Whether it is a multi-tiered ganache cake or warm molten cookies, each treat is boxed with care and dispatched in temperature-controlled totes across Lahore, Karachi &amp; Islamabad.
+                Every morning, our cloud bakehouse prepares strictly limited micro-batches. Whether it is a multi-tiered ganache cake or warm molten cookies, each treat is boxed with care and dispatched in temperature-controlled totes fresh across Lahore.
               </p>
 
               <div className="flex items-center gap-3 pt-2 flex-wrap">

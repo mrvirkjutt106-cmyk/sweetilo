@@ -40,8 +40,8 @@ function sanitizeInput(value, maxLen = 200) {
   return value.replace(/[\x00-\x1F\x7F]/g, "").slice(0, maxLen);
 }
 
-// Whitelisted city values — never accept arbitrary city strings
-const ALLOWED_CITIES = ["Lahore", "Karachi", "Islamabad"];
+// Whitelisted city values — Lahore exclusive delivery
+const ALLOWED_CITIES = ["Lahore"];
 const ALLOWED_SLOTS  = ["express", "evening"];
 
 
@@ -329,21 +329,9 @@ export default function CheckoutPage() {
                 </h3>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {["Lahore", "Karachi", "Islamabad"].map((city) => (
-                  <button
-                    type="button"
-                    key={city}
-                    onClick={() => setFormData({ ...formData, city })}
-                    className={`py-2.5 px-4 rounded-xl border text-xs font-bold transition-all ${
-                      formData.city === city
-                        ? "bg-[#4a196d] text-white border-[#4a196d] shadow-xs"
-                        : "bg-stone-50 text-stone-700 border-stone-200 hover:bg-[#F6EFFC] hover:text-[#4a196d]"
-                    }`}
-                  >
-                    📍 {city}
-                  </button>
-                ))}
+              <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-[#F6EFFC] border border-purple-200 text-xs font-bold text-[#4a196d]">
+                <MapPin className="w-4 h-4 text-[#7e22ce] shrink-0" />
+                <span>📍 Delivering across all areas of Lahore (DHA, Gulberg, Model Town, Bahria & more)</span>
               </div>
 
               <div>

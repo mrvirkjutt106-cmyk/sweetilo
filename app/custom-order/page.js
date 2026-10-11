@@ -47,7 +47,7 @@ function sanitizeInput(value, maxLen = 200) {
 }
 
 // Whitelisted enum values — reject any value not in these sets
-const ALLOWED_CITIES       = ["Lahore", "Karachi", "Islamabad"];
+const ALLOWED_CITIES       = ["Lahore"];
 const ALLOWED_PRODUCT_TYPES = [
   "", "cake", "cupcakes", "dessert-cups", "cookies", "drinks-desserts", "dessert-table", "other",
 ];
@@ -702,9 +702,7 @@ export default function CustomOrderPage() {
                             onChange={handleInputChange}
                             className="w-full pl-10 pr-8 py-3 rounded-2xl border border-stone-200 text-xs sm:text-sm font-sans focus:outline-hidden focus:ring-2 focus:border-[#4a196d] focus:ring-[#e5d2f2] appearance-none bg-white cursor-pointer"
                           >
-                            <option value="Lahore">Lahore Hub</option>
-                            <option value="Karachi">Karachi Hub</option>
-                            <option value="Islamabad">Islamabad / RWP</option>
+                            <option value="Lahore">Lahore (All Areas)</option>
                           </select>
                           <ChevronDown className="w-4 h-4 text-stone-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                         </div>

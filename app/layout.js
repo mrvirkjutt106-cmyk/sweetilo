@@ -46,17 +46,15 @@ export const metadata = {
   keywords: [
     "Sweetilo",
     "Bakery Lahore",
-    "Bakery Karachi",
-    "Bakery Islamabad",
-    "Homemade cakes",
-    "NYC cookies",
-    "Tres Leches",
+    "Homemade cakes Lahore",
+    "NYC cookies Lahore",
+    "Tres Leches Lahore",
     "Gourmet bakery Pakistan",
   ],
   openGraph: {
     title: "Sweetilo — Taste Home. Baked on Cloud9",
     description:
-      "Handcrafted luxury cakes, molten artisan cookies, and cold brew milks across Lahore, Karachi & Islamabad.",
+      "Handcrafted luxury cakes, molten artisan cookies, and cold brew milks fresh across Lahore.",
     type: "website",
   },
 };

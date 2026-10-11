@@ -78,7 +78,7 @@ export default function BucketSidebar() {
               {/* Express Delivery Badge */}
               <div className="bg-[#FAF7F2] border-b border-purple-100 px-6 py-2.5 flex items-center gap-2 text-xs text-[#4a196d] font-bold">
                 <Truck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                <span>Express Chilled Tote Delivery • LHE • KHI • ISB</span>
+                <span>Express Chilled Delivery Across Lahore • Fresh Daily</span>
               </div>
 
               {/* Items List */}
