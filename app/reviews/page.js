@@ -304,7 +304,7 @@ export default function ReviewsPage() {
       </section>
 
       {/* ── Filters & Controls ── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <section className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-purple-100">
           {/* Category Tabs */}
           <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto hide-scrollbar pb-1 md:pb-0">
@@ -341,7 +341,7 @@ export default function ReviewsPage() {
         </div>
 
         {/* ── Reviews Grid (2-column on mobile, 3-column on desktop) ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pt-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-6 pt-8">
           {filteredReviews.map((item) => (
             <div
               key={item.id}
@@ -426,7 +426,7 @@ export default function ReviewsPage() {
       </section>
 
       {/* ── Bottom Order CTA ── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <section className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-12">
         <div className="bg-gradient-to-r from-[#4a196d] to-[#6d28d9] rounded-[32px] p-8 sm:p-12 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl relative overflow-hidden">
           <div className="relative z-10 max-w-lg text-center md:text-left">
             <span className="text-xs font-bold uppercase tracking-widest text-[#E0A94A] block mb-2">

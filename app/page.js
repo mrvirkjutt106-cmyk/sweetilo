@@ -106,7 +106,7 @@ export default function HomePage() {
           </svg>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 relative z-10">
           <div className="reveal flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-10 gap-3">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-[#4a196d] mb-2">— Cloud9 Top Picks</p>
@@ -125,7 +125,7 @@ export default function HomePage() {
           </div>
 
           {/* 2-col on mobile, 4-col on desktop — desktop quality cards with proportional aspect ratio */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
             {bestsellers.map((product, i) => (
               <div key={product.id} className={`reveal reveal-delay-${i + 1}`}>
                 <ProductCard product={product} />
@@ -227,7 +227,7 @@ export default function HomePage() {
 
       {/* ===== 5. SECONDARY SHOWCASE — Crafted for Every Moment ===== */}
       <section className="py-14 sm:py-20 bg-[#FAF7F2]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8">
 
           {/* Header */}
           <div className="reveal mb-10 sm:mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -252,7 +252,7 @@ export default function HomePage() {
           </div>
 
           {/* 2-col on mobile, 4-col on desktop — desktop quality product cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
             {showcaseItems.map((product, i) => (
               <div key={product.id} className={`reveal reveal-delay-${i + 1}`}>
                 <ProductCard product={product} />
@@ -264,7 +264,7 @@ export default function HomePage() {
 
       {/* ===== 6. TESTIMONIALS ===== */}
       <section id="reviews" className="py-14 sm:py-20 bg-white relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8">
           <div className="reveal flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-12 gap-3">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-[#4a196d] mb-2">— Customer Love</p>

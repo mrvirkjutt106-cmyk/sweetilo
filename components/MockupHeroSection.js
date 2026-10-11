@@ -252,10 +252,6 @@ export default function MockupHeroSection() {
                     <span className="text-[11px] font-bold text-[#230737]">Fresh Micro-Batch Today</span>
                   </div>
 
-                  {/* Price teaser chip top-right */}
-                  <div className="absolute top-4 right-4 bg-[#4a196d] text-white px-3 py-1.5 rounded-full shadow-md flex items-center gap-1">
-                    <span className="text-[11px] font-extrabold">From ₨850</span>
-                  </div>
                 </div>
               </div>
             </div>

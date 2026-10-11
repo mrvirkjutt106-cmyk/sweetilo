@@ -31,7 +31,7 @@ export default function MenuPage() {
 
   return (
     <div className="py-6 sm:py-12 bg-[#FAF7F2]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#F6EFFC] text-[#6b21a8] border border-purple-200/90 text-xs font-bold uppercase tracking-wider mb-2.5 shadow-xs">
@@ -149,7 +149,7 @@ export default function MenuPage() {
                   </div>
 
                   {/* 2-col on mobile, 4-col on desktop — desktop quality card grid */}
-                  <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
+                  <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-6">
                     {catProducts.map((product) => (
                       <div key={product.id}>
                         <ProductCard product={product} />
@@ -201,7 +201,7 @@ export default function MenuPage() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
+              <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-6">
                 {filteredProducts.map((product) => (
                   <div key={product.id}>
                     <ProductCard product={product} />

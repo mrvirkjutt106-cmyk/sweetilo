@@ -51,10 +51,10 @@ export default function BentoShowcaseV3() {
         </svg>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 relative z-10">
 
         {/* ---- Section Header ---- */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 sm:mb-14 gap-4 reveal" ref={(el) => { if (el) { const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { el.classList.add('is-visible'); obs.disconnect(); } }, { threshold: 0.2 }); obs.observe(el); } }}>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-14 gap-4 reveal" ref={(el) => { if (el) { const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { el.classList.add('is-visible'); obs.disconnect(); } }, { threshold: 0.2 }); obs.observe(el); } }}>
           <div>
             {/* Eyebrow label */}
             <p className="text-xs font-black uppercase tracking-[0.18em] text-[#4a196d] mb-3">
@@ -90,17 +90,9 @@ export default function BentoShowcaseV3() {
           </Link>
         </div>
 
-        {/* ---- Mobile swipe hint ---- */}
-        <div className="flex items-center justify-between lg:hidden mb-4">
-          <span className="text-[11px] font-bold text-[#4a196d] bg-[#F6EFFC] px-3 py-1 rounded-full border border-purple-200/80">
-            Swipe cards →
-          </span>
-        </div>
-
         {/* ---- 4-col Grid (2×2 on mobile, 4-col on desktop) ---- */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
           {CATEGORIES.map((cat, idx) => {
-            const isLoaded = loadedImages[cat.id];
             return (
               <div
                 key={cat.id}
@@ -114,16 +106,12 @@ export default function BentoShowcaseV3() {
                 >
                   {/* Colored tile background + image with 4:3 aspect ratio */}
                   <div className={`relative aspect-[4/3] w-full overflow-hidden ${TILE_COLORS[idx]}`}>
-                    {/* Shimmer placeholder */}
-                    {!isLoaded && <div className="absolute inset-0 vibrant-shimmer" />}
-
                     <img
                       src={cat.image}
                       alt={cat.name}
-                      onLoad={() => handleImageLoad(cat.id)}
-                      onError={(e) => { e.currentTarget.src = FALLBACK_IMAGE; handleImageLoad(cat.id); }}
-                      className={`card-img w-full h-full object-cover object-center ${isLoaded ? "opacity-100" : "opacity-0"}`}
-                      loading="lazy"
+                      onError={(e) => { e.currentTarget.src = FALLBACK_IMAGE; }}
+                      className="card-img w-full h-full object-cover object-center"
+                      loading="eager"
                       decoding="async"
                     />
 

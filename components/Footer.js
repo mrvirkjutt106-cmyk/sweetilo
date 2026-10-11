@@ -50,7 +50,7 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-[#1B0D24] text-stone-300 pt-16 pb-10 border-t border-purple-800/40 relative overflow-hidden">
+    <footer className="bg-[#1B0D24] text-stone-300 pt-16 pb-24 lg:pb-10 border-t border-purple-800/40 relative overflow-hidden">
       {/* Background ambient glow */}
       <div
         aria-hidden="true"

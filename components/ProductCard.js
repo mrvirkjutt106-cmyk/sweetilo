@@ -37,52 +37,35 @@ export default function ProductCard({ product }) {
 
       {/* ---- Image tile: Proportional Aspect Ratio (4:3) ---- */}
       <div className={`relative aspect-[4/3] w-full overflow-hidden ${tileBg}`}>
-        {/* Shimmer */}
-        {!imageLoaded && <div className="absolute inset-0 vibrant-shimmer" />}
-
         <img
           src={product.image || FALLBACK_IMAGE}
           alt={product.name}
-          onLoad={() => setImageLoaded(true)}
-          onError={(e) => { e.currentTarget.src = FALLBACK_IMAGE; setImageLoaded(true); }}
-          className={`card-img w-full h-full object-cover object-center ${imageLoaded ? "opacity-100" : "opacity-0"}`}
+          onError={(e) => { e.currentTarget.src = FALLBACK_IMAGE; }}
+          className="card-img w-full h-full object-cover object-center"
           loading="lazy"
           decoding="async"
         />
 
         {/* Badge top-left */}
         {product.badge && (
-          <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-10">
-            <span className="text-[9px] sm:text-[10px] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full font-black uppercase tracking-wider bg-[#4a196d] text-white shadow-md">
+          <div className="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 z-10">
+            <span className="text-[8.5px] sm:text-[10px] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full font-black uppercase tracking-wider bg-[#4a196d] text-white shadow-md">
               {product.badge}
             </span>
           </div>
         )}
 
-        {/* Circular arrow button bottom-right */}
-        <button
-          onClick={handleAdd}
-          className={`card-arrow-btn absolute bottom-2.5 right-2.5 sm:bottom-3 sm:right-3 w-8 h-8 sm:w-9 sm:h-9 rounded-full border flex items-center justify-center shadow-sm z-10 ${
-            isAdded
-              ? "bg-emerald-500 border-emerald-300 text-white"
-              : "bg-white border-purple-200/70 text-[#4a196d]"
-          }`}
-          aria-label={`Add ${product.name} to bucket`}
-        >
-          {isAdded ? <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[3]" /> : <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
-        </button>
-
         {/* Prep time chip */}
-        <div className="absolute bottom-2.5 left-2.5 sm:bottom-3 sm:left-3 z-10">
-          <span className="flex items-center gap-1 bg-white/90 backdrop-blur-md px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full border border-purple-100 text-[9px] sm:text-[10px] font-semibold text-stone-700 shadow-xs">
-            <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#E0A94A]" />
-            <span className="truncate max-w-[80px] sm:max-w-none">{product.prepTime}</span>
+        <div className="absolute bottom-2 left-2 z-10">
+          <span className="flex items-center gap-1 bg-white/95 backdrop-blur-md px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full border border-purple-100 text-[8.5px] sm:text-[10px] font-semibold text-stone-700 shadow-xs">
+            <Clock className="w-2.5 h-2.5 text-[#E0A94A]" />
+            <span className="truncate max-w-[120px] sm:max-w-none">{product.prepTime}</span>
           </span>
         </div>
       </div>
 
-      {/* ---- Product info (below tile, matching desktop proportions) ---- */}
-      <div className="p-3 sm:p-4 flex-1 flex flex-col gap-1.5 sm:gap-2">
+      {/* ---- Product info (below tile, spacious without overlaps) ---- */}
+      <div className="p-2.5 sm:p-4 flex-1 flex flex-col gap-1 sm:gap-2">
         {/* Rating */}
         <div className="flex items-center gap-1 sm:gap-1.5">
           <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-[#E0A94A] text-[#E0A94A]" />
@@ -100,20 +83,24 @@ export default function ProductCard({ product }) {
           {product.description}
         </p>
 
-        {/* Price + Add button row */}
-        <div className="flex items-center justify-between pt-2 mt-auto border-t border-purple-50 gap-2">
+        {/* Price + Add button row: full width, whitespace-nowrap, zero overlap */}
+        <div className="flex items-center justify-between pt-1.5 mt-auto border-t border-purple-50/80 gap-1.5">
           {priceDisplay ? (
-            <div className="min-w-0">
-              <span className="text-sm sm:text-base lg:text-lg font-extrabold text-[#4a196d] block truncate">{priceDisplay}</span>
-              <span className="text-[9px] sm:text-[10px] text-stone-400 font-medium block leading-none">per piece</span>
+            <div className="min-w-0 flex-1">
+              <span className="text-[12.5px] sm:text-base font-extrabold text-[#4a196d] block whitespace-nowrap leading-tight">
+                {priceDisplay}
+              </span>
+              <span className="text-[9px] sm:text-[10px] text-stone-400 font-medium block leading-tight">
+                per piece
+              </span>
             </div>
           ) : (
-            <span className="text-[11px] sm:text-xs text-stone-400 italic">On request</span>
+            <span className="text-[10px] sm:text-xs text-stone-400 italic">On request</span>
           )}
 
           <button
             onClick={handleAdd}
-            className={`pill-btn text-[11px] sm:text-xs py-1.5 px-2.5 sm:py-2 sm:px-4 gap-1 sm:gap-1.5 shrink-0 ${
+            className={`pill-btn text-[11px] sm:text-xs py-1 px-2.5 sm:py-2 sm:px-4 gap-1 shrink-0 ${
               isAdded
                 ? "bg-emerald-500 text-white shadow-md"
                 : "bg-[#4a196d] text-white shadow-[0_4px_14px_rgba(74,25,109,0.25)]"
@@ -121,9 +108,9 @@ export default function ProductCard({ product }) {
             aria-label={`Add ${product.name} to bucket`}
           >
             {isAdded ? (
-              <><Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[3]" /><span>Added!</span></>
+              <><Check className="w-3 h-3 stroke-[3]" /><span>Added!</span></>
             ) : (
-              <><ShoppingBag className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-purple-200" /><span>Add</span></>
+              <><ShoppingBag className="w-3 h-3 text-purple-200" /><span>Add</span></>
             )}
           </button>
         </div>

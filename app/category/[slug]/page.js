@@ -39,7 +39,7 @@ export default function CategoryPage({ params }) {
 
   return (
     <div className="py-6 sm:py-12 bg-[#FAF7F2]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8">
         {/* Back breadcrumb */}
         <div className="mb-4 sm:mb-6">
           <Link
@@ -115,7 +115,7 @@ export default function CategoryPage({ params }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-6">
             {categoryProducts.map((product) => (
               <div key={product.id}>
                 <ProductCard product={product} />
