@@ -1,19 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ShoppingBag, Menu as MenuIcon, X } from "lucide-react";
+import { ShoppingBag, Menu as MenuIcon, X, Search } from "lucide-react";
 import { useBucket } from "@/context/BucketContext";
+
+// ── SECURITY: Contact details from environment variables ───────────────────────
+// Never hardcode phone numbers in source. Set NEXT_PUBLIC_WHATSAPP_NUMBER
+// in .env.local. NEXT_PUBLIC_ prefix is correct here — this is public UI data.
+const WHATSAPP_NUMBER =
+  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "923008457933";
 
 export default function Navbar() {
   const pathname = usePathname();
   const { toggleBucket, totalItems } = useBucket();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  const whatsappUrl =
-    "https://wa.me/923001234567?text=Hi%20Sweetilo!%20I'd%20like%20to%20order%20some%20fresh%20treats.";
+  // ── SECURITY: Use encodeURIComponent for WhatsApp message ─────────────────
+  // Manual percent-encoding is error-prone; encodeURIComponent handles all
+  // special characters correctly and prevents URL injection.
+  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    "Hi Sweetilo! I'd like to order some fresh treats."
+  )}`;
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -21,140 +32,217 @@ export default function Navbar() {
     { name: "Our Menu", href: "/menu" },
     { name: "Custom Orders", href: "/custom-order" },
     { name: "Reviews", href: "/#reviews" },
-    { name: "Contact Us", href: "https://wa.me/923001234567", isExternal: true },
+    {
+      name: "Contact Us",
+      href: `https://wa.me/${WHATSAPP_NUMBER}`,
+      isExternal: true,
+    },
   ];
 
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 18);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Close drawer on route change
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
+    setMobileMenuOpen(false);
+  }
+
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-purple-200/80 shadow-[0_4px_20px_rgba(74,25,109,0.04)]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20 sm:h-22">
-          {/* Left: Official Logo */}
-          <Link href="/" className="flex items-center group shrink-0">
-            <Image
-              src="/Official Logo.png"
-              alt="Sweetilo - Baked on Cloud9, delivered to your heart"
-              width={220}
-              height={70}
-              priority
-              className="h-14 sm:h-16 w-auto object-contain transition-transform duration-250 group-hover:scale-102"
-            />
-          </Link>
+    <>
+      <header
+        className={`sticky top-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? "bg-white/97 backdrop-blur-lg shadow-[0_4px_24px_rgba(74,25,109,0.08)] border-b border-purple-100"
+            : "bg-white/90 backdrop-blur-md border-b border-purple-200/60"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20 lg:grid lg:grid-cols-3 lg:gap-4">
+            {/* Left: Logo */}
+            <Link href="/" className="flex items-center group shrink-0">
+              <Image
+                src="/Official Logo.png"
+                alt="Sweetilo — Baked on Cloud9, delivered to your heart"
+                width={200}
+                height={64}
+                priority
+                className="h-12 sm:h-14 w-auto object-contain transition-transform duration-250 group-hover:scale-[1.02]"
+              />
+            </Link>
 
-          {/* Center: Inline Navigation Links (Desktop) */}
-          <nav className="hidden lg:flex items-center gap-7 xl:gap-9">
-            {navLinks.map((link) => {
-              const isActive =
-                link.href === "/"
-                  ? pathname === "/"
-                  : !link.isExternal && pathname.startsWith(link.href);
+            {/* Center: Nav Links (Desktop only) */}
+            <nav className="hidden lg:flex items-center justify-center gap-6 xl:gap-8">
+              {navLinks.map((link) => {
+                const isActive =
+                  link.href === "/"
+                    ? pathname === "/"
+                    : !link.isExternal && pathname.startsWith(link.href);
 
-              if (link.isExternal) {
+                if (link.isExternal) {
+                  return (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[13px] font-semibold text-stone-600 hover:text-[#4a196d] transition-colors"
+                    >
+                      {link.name}
+                    </a>
+                  );
+                }
+
                 return (
-                  <a
+                  <Link
                     key={link.name}
                     href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[13px] font-bold text-stone-700 hover:text-[#7e22ce] transition-colors"
+                    className={`text-[13px] font-semibold transition-all relative py-1 ${
+                      isActive
+                        ? "text-[#4a196d] font-bold"
+                        : "text-stone-600 hover:text-[#4a196d]"
+                    }`}
                   >
                     {link.name}
-                  </a>
+                    {isActive && (
+                      <span className="absolute -bottom-0.5 inset-x-0 h-[2.5px] bg-gradient-to-r from-[#4a196d] to-[#9333ea] rounded-full" />
+                    )}
+                  </Link>
                 );
-              }
+              })}
+            </nav>
 
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className={`text-[13px] font-bold transition-all relative py-1 ${
-                    isActive
-                      ? "text-[#4a196d]"
-                      : "text-stone-700 hover:text-[#7e22ce]"
-                  }`}
-                >
-                  {link.name}
-                  {isActive && (
-                    <span className="absolute bottom-0 inset-x-0 h-0.5 bg-gradient-to-r from-[#4a196d] to-[#9333ea] rounded-full" />
-                  )}
-                </Link>
-              );
-            })}
+            {/* Right: Icons + CTA */}
+            <div className="flex items-center justify-end gap-2 sm:gap-3">
+              {/* Search icon */}
+              <button
+                className="hidden sm:flex p-2.5 rounded-full text-stone-500 hover:text-[#4a196d] hover:bg-[#F6EFFC] transition-all"
+                aria-label="Search"
+              >
+                <Search className="w-5 h-5" />
+              </button>
+
+              {/* Cart Bucket Icon */}
+              <button
+                onClick={toggleBucket}
+                className="relative p-2.5 rounded-full text-stone-600 hover:text-[#4a196d] hover:bg-[#F6EFFC] transition-all"
+                aria-label="View Shopping Bucket"
+              >
+                <ShoppingBag className="w-5 h-5" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-gradient-to-r from-[#4a196d] to-[#9333ea] text-white text-[10px] font-black flex items-center justify-center shadow-sm">
+                    {totalItems}
+                  </span>
+                )}
+              </button>
+
+              {/* Pill CTA — Order on WhatsApp */}
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pill-btn hidden sm:inline-flex bg-[#4a196d] hover:bg-[#5c1b89] text-white shadow-[0_6px_20px_rgba(74,25,109,0.30)] text-xs sm:text-[13px] tracking-wide"
+              >
+                <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current text-emerald-300 shrink-0" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.63C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 6.46 17.5 2 12.04 2ZM12.04 20.16C10.59 20.16 9.17 19.77 7.93 19.03L7.63 18.85L4.51 19.67L5.34 16.63L5.15 16.32C4.34 15.03 3.91 13.51 3.91 11.91C3.91 7.43 7.56 3.78 12.05 3.78C14.22 3.78 16.26 4.63 17.79 6.16C19.32 7.7 20.17 9.74 20.17 11.92C20.16 16.4 16.52 20.16 12.04 20.16Z"/>
+                </svg>
+                <span>Order Now</span>
+                <span className="pill-arrow text-emerald-300">→</span>
+              </a>
+
+              {/* Mobile Hamburger */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="lg:hidden p-2.5 rounded-full text-stone-600 hover:text-[#4a196d] hover:bg-[#F6EFFC] transition-all"
+                aria-label="Toggle navigation menu"
+                aria-expanded={mobileMenuOpen}
+              >
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <MenuIcon className="w-5 h-5" />}
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Slide-in Drawer */}
+      <div
+        className={`lg:hidden fixed inset-0 z-40 transition-all duration-300 ${
+          mobileMenuOpen ? "pointer-events-auto" : "pointer-events-none"
+        }`}
+      >
+        {/* Backdrop */}
+        <div
+          className={`absolute inset-0 bg-[#1B0D24]/40 backdrop-blur-sm transition-opacity duration-300 ${
+            mobileMenuOpen ? "opacity-100" : "opacity-0"
+          }`}
+          onClick={() => setMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+        {/* Drawer Panel */}
+        <div
+          className={`absolute top-0 right-0 h-full w-72 max-w-[85vw] bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-out ${
+            mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          {/* Drawer header */}
+          <div className="flex items-center justify-between px-5 py-5 border-b border-purple-100">
+            <span className="font-script text-2xl text-[#4a196d]">Sweetilo</span>
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-2 rounded-full hover:bg-[#F6EFFC] text-stone-500 transition-colors"
+              aria-label="Close menu"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Nav links */}
+          <nav className="flex-1 overflow-y-auto px-5 py-6 space-y-1">
+            {navLinks.map((link, i) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm font-semibold transition-all ${
+                  (!link.isExternal && (link.href === "/" ? pathname === "/" : pathname.startsWith(link.href)))
+                    ? "bg-[#F6EFFC] text-[#4a196d] font-bold"
+                    : "text-stone-700 hover:bg-stone-50 hover:text-[#4a196d]"
+                }`}
+                style={{ transitionDelay: mobileMenuOpen ? `${i * 40}ms` : "0ms" }}
+                {...(link.isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              >
+                {link.name}
+              </Link>
+            ))}
           </nav>
 
-          {/* Right: Vibrant 'Order on WhatsApp' + Cart Bucket */}
-          <div className="flex items-center gap-3">
-            {/* Cart Bucket Icon Button */}
+          {/* CTA at bottom of drawer */}
+          <div className="px-5 py-5 border-t border-purple-100 space-y-3">
             <button
-              onClick={toggleBucket}
-              className="relative p-2.5 rounded-xl text-stone-700 hover:text-[#4a196d] hover:bg-[#F6EFFC] transition-all cursor-pointer border border-transparent hover:border-purple-200"
-              aria-label="View Shopping Bucket"
+              onClick={() => { toggleBucket(); setMobileMenuOpen(false); }}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-full border-2 border-[#4a196d] text-[#4a196d] text-sm font-bold transition-all hover:bg-[#F6EFFC]"
             >
-              <ShoppingBag className="w-5 h-5 text-stone-700" />
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-[19px] h-[19px] px-1 rounded-full bg-gradient-to-r from-[#4a196d] to-[#9333ea] text-white text-[10px] font-black flex items-center justify-center shadow-sm">
-                  {totalItems}
-                </span>
-              )}
+              <ShoppingBag className="w-4 h-4" />
+              <span>View Bucket {totalItems > 0 ? `(${totalItems})` : ""}</span>
             </button>
-
-            {/* Vibrant Purple 'Order on WhatsApp' Button */}
             <a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-[#4a196d] via-[#6f22a5] to-[#7e22ce] hover:from-[#3a1357] hover:to-[#6b21a8] text-white text-xs sm:text-sm font-bold tracking-wide shadow-vibrant-purple hover:shadow-lg transition-all duration-200 cursor-pointer active:scale-98"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-full bg-[#4a196d] text-white text-sm font-bold shadow-md transition-all hover:bg-[#5c1b89]"
             >
-              <svg
-                viewBox="0 0 24 24"
-                className="w-4 h-4 fill-current text-emerald-300"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.63C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 6.46 17.5 2 12.04 2ZM12.04 20.16C10.59 20.16 9.17 19.77 7.93 19.03L7.63 18.85L4.51 19.67L5.34 16.63L5.15 16.32C4.34 15.03 3.91 13.51 3.91 11.91C3.91 7.43 7.56 3.78 12.05 3.78C14.22 3.78 16.26 4.63 17.79 6.16C19.32 7.7 20.17 9.74 20.17 11.92C20.16 16.4 16.52 20.16 12.04 20.16ZM16.49 14.34C16.25 14.22 15.04 13.63 14.82 13.55C14.59 13.47 14.43 13.43 14.26 13.67C14.1 13.91 13.62 14.47 13.47 14.64C13.33 14.8 13.18 14.82 12.94 14.7C12.7 14.58 11.93 14.33 11.01 13.51C10.29 12.87 9.8 12.08 9.66 11.84C9.52 11.6 9.64 11.47 9.76 11.35C9.87 11.24 10.01 11.06 10.13 10.92C10.25 10.78 10.29 10.68 10.37 10.52C10.45 10.36 10.41 10.22 10.35 10.1C10.29 9.98 9.8 8.78 9.6 8.29C9.4 7.82 9.2 7.88 9.05 7.87L8.57 7.86C8.41 7.86 8.14 7.92 7.92 8.16C7.7 8.4 7.07 8.99 7.07 10.2C7.07 11.41 7.95 12.58 8.07 12.74C8.19 12.9 9.8 15.38 12.26 16.44C12.85 16.7 13.31 16.85 13.66 16.96C14.25 17.15 14.79 17.12 15.22 17.06C15.7 16.99 16.69 16.46 16.9 15.87C17.1 15.28 17.1 14.78 17.04 14.68C16.98 14.58 16.73 14.46 16.49 14.34Z" />
+              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current text-emerald-300 shrink-0" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.63C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 6.46 17.5 2 12.04 2ZM12.04 20.16C10.59 20.16 9.17 19.77 7.93 19.03L7.63 18.85L4.51 19.67L5.34 16.63L5.15 16.32C4.34 15.03 3.91 13.51 3.91 11.91C3.91 7.43 7.56 3.78 12.05 3.78C14.22 3.78 16.26 4.63 17.79 6.16C19.32 7.7 20.17 9.74 20.17 11.92C20.16 16.4 16.52 20.16 12.04 20.16Z"/>
               </svg>
               <span>Order on WhatsApp</span>
             </a>
-
-            {/* Mobile Hamburger Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl text-stone-700 hover:text-[#4a196d] hover:bg-stone-100"
-              aria-label="Toggle navigation menu"
-            >
-              {mobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <MenuIcon className="w-6 h-6" />
-              )}
-            </button>
           </div>
         </div>
       </div>
-
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-purple-200 bg-white px-5 py-4 space-y-2 shadow-xl animate-fade-up">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-2 text-sm font-bold text-stone-800 hover:text-[#7e22ce]"
-            >
-              {link.name}
-            </Link>
-          ))}
-          <div className="pt-2">
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-[#4a196d] to-[#7e22ce] text-white text-xs font-bold shadow-md"
-            >
-              <span>Order on WhatsApp</span>
-            </a>
-          </div>
-        </div>
-      )}
-    </header>
+    </>
   );
 }

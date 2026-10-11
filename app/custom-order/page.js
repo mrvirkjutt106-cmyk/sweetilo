@@ -28,6 +28,82 @@ import {
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SECURITY: Input sanitization
+// Strip control characters and enforce length limits on all user text.
+// ─────────────────────────────────────────────────────────────────────────────
+const INPUT_LIMITS = {
+  fullName:          100,
+  phone:             30,
+  address:           300,
+  themeDescription:  1000,
+  customFlavorNotes: 300,
+  customGuestCount:  50,
+};
+
+function sanitizeInput(value, maxLen = 200) {
+  if (typeof value !== "string") return "";
+  return value.replace(/[\x00-\x1F\x7F]/g, "").slice(0, maxLen);
+}
+
+// Whitelisted enum values — reject any value not in these sets
+const ALLOWED_CITIES       = ["Lahore", "Karachi", "Islamabad"];
+const ALLOWED_PRODUCT_TYPES = [
+  "", "cake", "cupcakes", "dessert-cups", "cookies", "drinks-desserts", "dessert-table", "other",
+];
+const ALLOWED_TIME_SLOTS  = ["", "morning", "afternoon", "evening", "night", "specific"];
+const ALLOWED_SERVING_OPTS = ["", "4-6", "8-12", "15-20", "25-35", "40+", "custom"];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECURITY: File upload validation
+// Client-supplied MIME types (file.type) are trivially spoofable — a user can
+// rename any file to .jpg and the browser will still report 'image/jpeg'.
+// We verify the ACTUAL file contents by reading the first 12 bytes and
+// checking magic bytes (file signatures) against known image formats.
+// Files failing either the extension, size, or magic-byte check are rejected.
+// ─────────────────────────────────────────────────────────────────────────────
+const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB (reduced from 10 MB)
+const MAX_FILE_COUNT      = 5;               // Maximum uploaded files
+
+// Allowed MIME types (for the accept attribute and first-pass check)
+const ALLOWED_MIME_TYPES = new Set(["image/jpeg", "image/jpg", "image/png", "image/webp"]);
+
+/**
+ * Verify image file magic bytes (file signature) by reading the first 12 bytes.
+ * Returns a Promise<boolean> — true if the file header matches a known image type.
+ *
+ * Magic byte references:
+ *   JPEG: FF D8 FF
+ *   PNG:  89 50 4E 47 0D 0A 1A 0A
+ *   WebP: 52 49 46 46 .. .. .. .. 57 45 42 50 (RIFF....WEBP)
+ */
+async function verifyImageMagicBytes(file) {
+  try {
+    const headerBytes = await file.slice(0, 12).arrayBuffer();
+    const bytes = new Uint8Array(headerBytes);
+
+    // JPEG: starts with FF D8 FF
+    if (bytes[0] === 0xFF && bytes[1] === 0xD8 && bytes[2] === 0xFF) return true;
+
+    // PNG: starts with 89 50 4E 47 0D 0A 1A 0A
+    if (
+      bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4E && bytes[3] === 0x47 &&
+      bytes[4] === 0x0D && bytes[5] === 0x0A && bytes[6] === 0x1A && bytes[7] === 0x0A
+    ) return true;
+
+    // WebP: RIFF (52 49 46 46) at offset 0, WEBP (57 45 42 50) at offset 8
+    if (
+      bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46 &&
+      bytes[8] === 0x57 && bytes[9] === 0x45 && bytes[10] === 0x42 && bytes[11] === 0x50
+    ) return true;
+
+    return false;
+  } catch {
+    return false; // reading failed — reject the file
+  }
+}
+
+
 // Popular signature flavor choices for quick selection
 const SIGNATURE_FLAVORS = [
   "Belgian Dark Chocolate Fudge",
@@ -110,7 +186,23 @@ export default function CustomOrderPage() {
   // Handle standard text / select change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // ── SECURITY: Whitelist-validate enum fields; sanitize free-text fields ──
+    let safeValue = value;
+    if (name === "city") {
+      safeValue = ALLOWED_CITIES.includes(value) ? value : "Lahore";
+    } else if (name === "productType") {
+      safeValue = ALLOWED_PRODUCT_TYPES.includes(value) ? value : "";
+    } else if (name === "deliveryTime") {
+      safeValue = ALLOWED_TIME_SLOTS.includes(value) ? value : "";
+    } else if (name === "servingSize") {
+      safeValue = ALLOWED_SERVING_OPTS.includes(value) ? value : "";
+    } else {
+      // Free-text field — sanitize and enforce length limit
+      safeValue = sanitizeInput(value, INPUT_LIMITS[name] ?? 200);
+    }
+
+    setFormData((prev) => ({ ...prev, [name]: safeValue }));
     if (formErrors[name]) {
       setFormErrors((prev) => ({ ...prev, [name]: null }));
     }
@@ -128,19 +220,72 @@ export default function CustomOrderPage() {
   };
 
   // Handle file selection and preview generation
-  const handleFileChange = (e) => {
+  // SECURITY: We validate file count, size, MIME type, and magic bytes.
+  const handleFileChange = async (e) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
 
-    const newEntries = files.map((file) => ({
-      id: Math.random().toString(36).substring(7),
-      file,
-      name: file.name,
-      size: (file.size / 1024 / 1024).toFixed(2), // MB
-      previewUrl: URL.createObjectURL(file),
-    }));
+    // Reset the input so the same file can be re-added after removal
+    e.target.value = "";
 
-    setUploadedFiles((prev) => [...prev, ...newEntries]);
+    const remaining = MAX_FILE_COUNT - uploadedFiles.length;
+    if (remaining <= 0) {
+      setFormErrors((prev) => ({
+        ...prev,
+        files: `Maximum ${MAX_FILE_COUNT} reference images allowed.`,
+      }));
+      return;
+    }
+
+    const validEntries = [];
+    const rejectedNames = [];
+
+    for (const file of files.slice(0, remaining)) {
+      // 1. File size check
+      if (file.size > MAX_FILE_SIZE_BYTES) {
+        rejectedNames.push(`${file.name} (exceeds 5 MB)`);
+        continue;
+      }
+
+      // 2. MIME type whitelist check (first pass — client-reported, spoofable)
+      if (!ALLOWED_MIME_TYPES.has(file.type)) {
+        rejectedNames.push(`${file.name} (unsupported type)`);
+        continue;
+      }
+
+      // 3. Magic byte verification (reads actual file header bytes)
+      // This catches files with a renamed extension (e.g., malware.png).
+      const isValidImage = await verifyImageMagicBytes(file);
+      if (!isValidImage) {
+        rejectedNames.push(`${file.name} (invalid image content)`);
+        continue;
+      }
+
+      validEntries.push({
+        // SECURITY: Use crypto.randomUUID for preview IDs to avoid collisions
+        id:         typeof crypto !== "undefined" && crypto.randomUUID
+                      ? crypto.randomUUID()
+                      : `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        file,
+        // Sanitize the file name displayed in the UI
+        name:       sanitizeInput(file.name, 100),
+        size:       (file.size / 1024 / 1024).toFixed(2), // MB
+        previewUrl: URL.createObjectURL(file),
+      });
+    }
+
+    if (rejectedNames.length > 0) {
+      setFormErrors((prev) => ({
+        ...prev,
+        files: `Rejected: ${rejectedNames.join(", ")}. Only PNG, JPG, WEBP under 5 MB are allowed.`,
+      }));
+    } else {
+      setFormErrors((prev) => ({ ...prev, files: null }));
+    }
+
+    if (validEntries.length > 0) {
+      setUploadedFiles((prev) => [...prev, ...validEntries]);
+    }
   };
 
   // Remove uploaded file
@@ -200,7 +345,13 @@ export default function CustomOrderPage() {
     // Simulate quote processing
     setTimeout(() => {
       setIsSubmitting(false);
-      const quoteId = `SWQ-${Math.floor(10000 + Math.random() * 90000)}`;
+
+      // SECURITY: Use crypto.randomUUID for unpredictable, non-enumerable quote IDs
+      const rawUUID =
+        typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      const quoteId = `SWQ-${rawUUID.replace(/-/g, "").slice(0, 8).toUpperCase()}`;
 
       const quoteReceipt = {
         quoteId,
@@ -211,7 +362,25 @@ export default function CustomOrderPage() {
           hour: "2-digit",
           minute: "2-digit",
         }),
-        data: { ...formData },
+        // SECURITY: Always store the sanitized copy, not raw formData
+        data: {
+          fullName:          sanitizeInput(formData.fullName,          INPUT_LIMITS.fullName),
+          phone:             sanitizeInput(formData.phone,             INPUT_LIMITS.phone),
+          address:           sanitizeInput(formData.address,           INPUT_LIMITS.address),
+          city:              ALLOWED_CITIES.includes(formData.city) ? formData.city : "Lahore",
+          deliveryDate:      sanitizeInput(formData.deliveryDate,      10),  // YYYY-MM-DD
+          deliveryTime:      ALLOWED_TIME_SLOTS.includes(formData.deliveryTime) ? formData.deliveryTime : "",
+          productType:       ALLOWED_PRODUCT_TYPES.includes(formData.productType) ? formData.productType : "",
+          themeDescription:  sanitizeInput(formData.themeDescription,  INPUT_LIMITS.themeDescription),
+          flavorPreferences: Array.isArray(formData.flavorPreferences)
+                               ? formData.flavorPreferences.filter(
+                                   (f) => typeof f === "string" && SIGNATURE_FLAVORS.includes(f)
+                                 )
+                               : [],
+          customFlavorNotes: sanitizeInput(formData.customFlavorNotes, INPUT_LIMITS.customFlavorNotes),
+          servingSize:       ALLOWED_SERVING_OPTS.includes(formData.servingSize) ? formData.servingSize : "",
+          customGuestCount:  sanitizeInput(formData.customGuestCount,  INPUT_LIMITS.customGuestCount),
+        },
         filesCount: uploadedFiles.length,
       };
 
@@ -225,7 +394,7 @@ export default function CustomOrderPage() {
           origin: { y: 0.6 },
           colors: ["#4a196d", "#672696", "#E0A94A", "#F3B552", "#FAF7F2"],
         });
-      } catch (err) {}
+      } catch { /* ignore confetti errors */ }
 
       window.scrollTo({ top: 100, behavior: "smooth" });
     }, 1400);
@@ -338,7 +507,9 @@ export default function CustomOrderPage() {
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 mt-8">
                 <a
-                  href={`https://wa.me/923008457933?text=Hi%20Sweetilo!%20I%20just%20submitted%20a%20Custom%20Order%20Quote%20with%20ID%20${submissionResult.quoteId}.%20Can%20we%20connect%20about%20the%20details?`}
+                  href={`https://wa.me/923008457933?text=${encodeURIComponent(
+                    `Hi Sweetilo! I just submitted a Custom Order Quote with ID ${submissionResult.quoteId}. Can we connect about the details?`
+                  )}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition-colors shadow-md"

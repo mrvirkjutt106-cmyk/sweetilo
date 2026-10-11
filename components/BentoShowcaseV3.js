@@ -1,164 +1,151 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { CATEGORIES } from "@/data/data";
 
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80";
 
+// Tile bg colors mapped from existing palette
+const TILE_COLORS = [
+  "bg-[#F6EFFC]",   // Premium Cakes  — purple subtle
+  "bg-[#FEF3C7]",   // Artisan Cookies — gold light
+  "bg-[#FAF5FC]",   // Dessert Cups   — lavender
+  "bg-[#F4EDE2]",   // Glass Milks    — cream
+];
+
 export default function BentoShowcaseV3() {
   const [loadedImages, setLoadedImages] = useState({});
+  const sectionRef = useRef(null);
+  const cardRefs = useRef([]);
 
-  const handleImageLoad = (id) => {
+  const handleImageLoad = (id) =>
     setLoadedImages((prev) => ({ ...prev, [id]: true }));
-  };
 
-  // Vibrant bento configurations tailored for each bakery category
-  const bentoConfigs = [
-    {
-      ...CATEGORIES[0], // Premium Cakes
-      gridClass: "lg:col-span-7 min-h-[380px] sm:min-h-[440px]",
-      tag: "Signature Creation",
-      accent: "from-[#230737]/95 via-[#4a196d]/65 to-transparent",
-      tagStyle: "bg-gradient-to-r from-[#4a196d] to-[#7e22ce] text-white border-purple-300/40",
-      accentColor: "text-purple-200",
-    },
-    {
-      ...CATEGORIES[1], // Artisan Cookies
-      gridClass: "lg:col-span-5 min-h-[380px] sm:min-h-[440px]",
-      tag: "NYC Molten Chunks",
-      accent: "from-[#2d1202]/95 via-[#78350f]/60 to-transparent",
-      tagStyle: "bg-gradient-to-r from-[#92400e] to-[#f59e0b] text-white border-amber-300/40",
-      accentColor: "text-amber-200",
-    },
-    {
-      ...CATEGORIES[2], // Dessert Cups
-      gridClass: "lg:col-span-5 min-h-[360px] sm:min-h-[420px]",
-      tag: "Saffron Cloud Tubs",
-      accent: "from-[#370a27]/95 via-[#831843]/60 to-transparent",
-      tagStyle: "bg-gradient-to-r from-[#9d174d] to-[#ec4899] text-white border-rose-300/40",
-      accentColor: "text-rose-200",
-    },
-    {
-      ...CATEGORIES[3], // Glass Bottle Milks
-      gridClass: "lg:col-span-7 min-h-[360px] sm:min-h-[420px]",
-      tag: "Vintage Slow-Steeped",
-      accent: "from-[#022c22]/95 via-[#065f46]/60 to-transparent",
-      tagStyle: "bg-gradient-to-r from-[#065f46] to-[#10b981] text-white border-emerald-300/40",
-      accentColor: "text-emerald-200",
-    },
-  ];
+  // Scroll-reveal for cards
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    cardRefs.current.forEach((el) => { if (el) observer.observe(el); });
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <section id="bento-showcase" className="w-full py-12 sm:py-20 bg-[#FAF7F2] relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-12 gap-4">
+    <section id="bento-showcase" className="w-full py-14 sm:py-20 bg-[#FAF7F2] relative overflow-hidden">
+
+      {/* Small decorative blob top-right */}
+      <div aria-hidden="true" className="absolute -top-16 -right-16 w-64 h-64 pointer-events-none opacity-60">
+        <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" className="w-full h-full animate-blob-slow">
+          <path d="M160,30 C240,20 290,100 285,175 C280,255 220,300 145,295 C70,290 15,220 20,145 C25,70 80,40 160,30Z" fill="#F6EFFC"/>
+        </svg>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+        {/* ---- Section Header ---- */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 sm:mb-14 gap-4 reveal" ref={(el) => { if (el) { const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { el.classList.add('is-visible'); obs.disconnect(); } }, { threshold: 0.2 }); obs.observe(el); } }}>
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F6EFFC] text-[#6b21a8] border border-purple-200/90 text-xs font-bold uppercase tracking-wider mb-2.5 shadow-xs">
-              <Sparkles className="w-3.5 h-3.5 text-[#9333ea]" />
-              <span>Curated Collections</span>
+            {/* Eyebrow label */}
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#4a196d] mb-3">
+              — Our Menu
+            </p>
+            <div className="relative inline-block">
+              <h2 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#1B0D24] tracking-tight leading-tight">
+                Explore{" "}
+                <span className="text-[#4a196d] relative">
+                  Our Delicious
+                  {/* Doodle underline */}
+                  <svg className="doodle-underline drawn absolute -bottom-1 left-0 w-full" height="8" viewBox="0 0 240 8" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M3,5 C50,2 100,7 150,4 C200,1 225,6 237,5" stroke="#E0A94A" strokeWidth="3" fill="none" strokeLinecap="round"/>
+                  </svg>
+                </span>
+                <br />
+                <span className="font-script font-normal text-[#4a196d] text-3xl sm:text-4xl">
+                  Creations
+                </span>
+              </h2>
             </div>
-            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#1B0D24] tracking-tight">
-              The <span className="vibrant-title-gradient">Cloud9</span> Showcase
-            </h2>
+            <p className="mt-3 text-sm text-stone-600 max-w-sm leading-relaxed">
+              From warm treats to delightful pastries, made with love and the finest ingredients.
+            </p>
           </div>
+
           <Link
             href="/menu"
-            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#4a196d] hover:text-[#7e22ce] transition-colors group"
+            className="inline-flex items-center gap-2 text-sm font-bold text-[#4a196d] hover:text-[#7e22ce] transition-colors group shrink-0 self-end sm:self-auto"
           >
-            <span>View All Menu Items</span>
-            <ArrowUpRight className="w-4 h-4 text-[#7e22ce] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            <span>View All Products</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
-        {/* Mobile Swipe Hint */}
-        <div className="flex items-center justify-between lg:hidden mb-3">
+        {/* ---- Mobile swipe hint ---- */}
+        <div className="flex items-center justify-between lg:hidden mb-4">
           <span className="text-[11px] font-bold text-[#4a196d] bg-[#F6EFFC] px-3 py-1 rounded-full border border-purple-200/80">
-            Swipe cards &rarr;
+            Swipe cards →
           </span>
-          <Link href="/menu" className="text-xs font-bold text-[#7e22ce]">
-            All Items
-          </Link>
         </div>
 
-        {/* Responsive Grid with Hardware Acceleration & Instant Render */}
-        <div className="flex flex-nowrap overflow-x-auto snap-x hide-scrollbar scrollbar-none gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 lg:grid lg:grid-cols-12 lg:gap-6 lg:overflow-visible lg:pb-0">
-          {bentoConfigs.map((cat) => {
+        {/* ---- 4-col Grid (2×2 on mobile) ---- */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {CATEGORIES.map((cat, idx) => {
             const isLoaded = loadedImages[cat.id];
-
             return (
               <div
                 key={cat.id}
-                className={`shrink-0 snap-start w-[78vw] sm:w-[50vw] lg:w-auto group relative rounded-3xl sm:rounded-[32px] overflow-hidden shadow-card hover:shadow-2xl border border-purple-200/80 bg-stone-900 flex flex-col justify-between transition-all duration-300 ease-out hover:-translate-y-1.5 gpu-accelerate ${cat.gridClass}`}
+                ref={(el) => { cardRefs.current[idx] = el; }}
+                className={`reveal reveal-delay-${Math.min(idx + 1, 4)} group artisan-card`}
               >
-                {/* Entire Card Click Target */}
                 <Link
                   href={`/category/${cat.slug}`}
-                  className="absolute inset-0 z-20"
+                  className="block rounded-[24px] sm:rounded-[28px] overflow-hidden border border-purple-200/70 bg-white shadow-[0_8px_30px_rgba(74,25,109,0.06)] hover:shadow-[0_16px_40px_rgba(74,25,109,0.14)] hover:border-[#9333ea]/40 transition-all duration-300"
+                  aria-label={`Explore ${cat.name}`}
                 >
-                  <span className="sr-only">Explore {cat.name}</span>
+                  {/* Colored tile background + image */}
+                  <div className={`relative h-44 sm:h-52 lg:h-56 overflow-hidden ${TILE_COLORS[idx]}`}>
+                    {/* Shimmer placeholder */}
+                    {!isLoaded && <div className="absolute inset-0 vibrant-shimmer" />}
+
+                    <img
+                      src={cat.image}
+                      alt={cat.name}
+                      onLoad={() => handleImageLoad(cat.id)}
+                      onError={(e) => { e.currentTarget.src = FALLBACK_IMAGE; handleImageLoad(cat.id); }}
+                      className={`card-img w-full h-full object-cover object-center ${isLoaded ? "opacity-100" : "opacity-0"}`}
+                      loading="lazy"
+                      decoding="async"
+                    />
+
+                    {/* Circular arrow button bottom-right */}
+                    <div className="card-arrow-btn absolute bottom-3 right-3 w-9 h-9 rounded-full bg-white text-[#4a196d] border border-purple-200/70 flex items-center justify-center shadow-sm z-10">
+                      <ArrowRight className="w-4 h-4" />
+                    </div>
+                  </div>
+
+                  {/* Card footer */}
+                  <div className="px-4 py-3.5">
+                    <h3 className="font-sans text-sm sm:text-base font-extrabold text-[#1B0D24] group-hover:text-[#4a196d] transition-colors leading-tight">
+                      {cat.name}
+                    </h3>
+                    <p className="text-[11px] sm:text-xs text-stone-500 mt-1 line-clamp-2 leading-snug">
+                      {cat.tagline}
+                    </p>
+                    <p className="text-[10px] font-bold text-[#4a196d] mt-2 uppercase tracking-wider">
+                      {cat.itemCount} items →
+                    </p>
+                  </div>
                 </Link>
-
-                {/* Instant Vibrant Shimmer Fallback (Loads on 0ms for slow networks) */}
-                <div className="absolute inset-0 vibrant-shimmer pointer-events-none" />
-
-                {/* Edge-to-Edge High Quality Imagery */}
-                <img
-                  src={cat.image}
-                  alt={cat.name}
-                  onLoad={() => handleImageLoad(cat.id)}
-                  onError={(e) => {
-                    e.currentTarget.src = FALLBACK_IMAGE;
-                    handleImageLoad(cat.id);
-                  }}
-                  className={`absolute inset-0 w-full h-full object-cover object-center group-hover:scale-106 transition-all duration-700 ease-out ${
-                    isLoaded ? "opacity-100" : "opacity-0"
-                  }`}
-                  loading="lazy"
-                  decoding="async"
-                />
-
-                {/* Vibrant Gradient Scrim Overlay for Contrast */}
-                <div
-                  className={`absolute inset-0 bg-gradient-to-t ${cat.accent} pointer-events-none transition-opacity duration-300 opacity-90 group-hover:opacity-95`}
-                />
-
-                {/* Top Row: Category Tag & Arrow Pill */}
-                <div className="relative z-10 p-5 sm:p-7 flex items-center justify-between">
-                  <span
-                    className={`inline-block px-3.5 py-1.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider shadow-sm border ${cat.tagStyle}`}
-                  >
-                    {cat.tag}
-                  </span>
-
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/25 backdrop-blur-md border border-white/40 text-white flex items-center justify-center group-hover:bg-white group-hover:text-[#4a196d] transition-all duration-300 shadow-sm">
-                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                  </div>
-                </div>
-
-                {/* Bottom Content: Category Name & Tagline */}
-                <div className="relative z-10 p-5 sm:p-8 space-y-2">
-                  <span className="text-xs uppercase tracking-widest text-amber-300 font-bold drop-shadow-sm flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                    Handcrafted Micro-Batch
-                  </span>
-                  <h3 className="font-serif text-2xl sm:text-4xl lg:text-4xl font-bold text-white leading-tight drop-shadow-md">
-                    {cat.name}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-stone-200 max-w-md line-clamp-2 leading-relaxed drop-shadow-sm">
-                    {cat.tagline}
-                  </p>
-
-                  <div className="pt-2">
-                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-white group-hover:text-amber-300 transition-colors">
-                      <span>Explore Collection</span>
-                      <span aria-hidden="true">&rarr;</span>
-                    </span>
-                  </div>
-                </div>
               </div>
             );
           })}

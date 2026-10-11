@@ -18,6 +18,33 @@ import { useBucket } from "@/context/BucketContext";
 
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80";
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SECURITY: Input sanitization helpers
+// All user-supplied fields are sanitized before being stored in state or
+// rendered into the DOM. React already escapes JSX text nodes, but we
+// additionally strip control characters and enforce length limits to prevent
+// resource exhaustion and future bugs if data is ever sent to a backend.
+// ─────────────────────────────────────────────────────────────────────────────
+const INPUT_LIMITS = {
+  fullName: 100,
+  phone:    30,
+  email:    254, // RFC 5321 max
+  address:  300,
+  notes:    500,
+};
+
+function sanitizeInput(value, maxLen = 200) {
+  if (typeof value !== "string") return "";
+  // Strip null bytes and ASCII control characters that are never valid in
+  // text fields but could be used for log injection or header injection.
+  return value.replace(/[\x00-\x1F\x7F]/g, "").slice(0, maxLen);
+}
+
+// Whitelisted city values — never accept arbitrary city strings
+const ALLOWED_CITIES = ["Lahore", "Karachi", "Islamabad"];
+const ALLOWED_SLOTS  = ["express", "evening"];
+
+
 export default function CheckoutPage() {
   const { bucket, totalItems, clearBucket } = useBucket();
 
@@ -38,22 +65,63 @@ export default function CheckoutPage() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+
+    if (type === "checkbox") {
+      setFormData((prev) => ({ ...prev, [name]: checked }));
+      return;
+    }
+
+    // ── SECURITY: Sanitize every text input before storing in state ──────
+    // Enforce per-field length limits and strip control characters.
+    const maxLen = INPUT_LIMITS[name] ?? 200;
+    const sanitized = sanitizeInput(value, maxLen);
+    setFormData((prev) => ({ ...prev, [name]: sanitized }));
   };
 
   const handlePlaceOrder = (e) => {
     e.preventDefault();
+
+    // ── SECURITY: Server-side-style validation on the client ─────────────
+    // In production this validation MUST also run on the server/API route.
+    // Whitelist city and deliverySlot to prevent arbitrary values entering state.
+    const safeCity = ALLOWED_CITIES.includes(formData.city) ? formData.city : "Lahore";
+    const safeSlot = ALLOWED_SLOTS.includes(formData.deliverySlot) ? formData.deliverySlot : "express";
+
+    const sanitizedData = {
+      fullName:        sanitizeInput(formData.fullName,  INPUT_LIMITS.fullName),
+      phone:           sanitizeInput(formData.phone,     INPUT_LIMITS.phone),
+      email:           sanitizeInput(formData.email,     INPUT_LIMITS.email),
+      city:            safeCity,
+      address:         sanitizeInput(formData.address,   INPUT_LIMITS.address),
+      deliverySlot:    safeSlot,
+      notes:           sanitizeInput(formData.notes,     INPUT_LIMITS.notes),
+      includeSparkler: Boolean(formData.includeSparkler),
+    };
+
+    if (!sanitizedData.fullName || !sanitizedData.phone || !sanitizedData.address) {
+      // Form-level HTML validation should catch this, but we guard defensively.
+      return;
+    }
+
     setIsSubmitting(true);
 
     setTimeout(() => {
       setIsSubmitting(false);
+
+      // ── SECURITY: Use crypto.randomUUID() for order IDs ─────────────────
+      // Math.random() produces predictable values; cryptographically random
+      // UUIDs make order IDs unguessable and prevent IDOR enumeration.
+      const rawUUID = (
+        typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(36).slice(2)}`
+      );
+      const orderId = `SW-${rawUUID.replace(/-/g, "").slice(0, 10).toUpperCase()}`;
+
       const generatedOrder = {
-        orderId: `SW-${Math.floor(100000 + Math.random() * 900000)}`,
+        orderId,
         items: [...bucket],
-        customer: { ...formData },
+        customer: sanitizedData,   // use the sanitized copy, not raw formData
         date: new Date().toLocaleString(),
       };
       setOrderComplete(generatedOrder);
@@ -66,12 +134,12 @@ export default function CheckoutPage() {
           origin: { y: 0.6 },
           colors: ["#4a196d", "#672696", "#E0A94A", "#F3B552", "#FAF7F2"],
         });
-      } catch (err) {}
+      } catch { /* ignore confetti errors */ }
 
-      // Clear the bucket state
       clearBucket();
     }, 1200);
   };
+
 
   // If order complete modal
   if (orderComplete) {

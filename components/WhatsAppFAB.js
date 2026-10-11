@@ -2,9 +2,23 @@
 
 import React from "react";
 
+// ── SECURITY: Read the WhatsApp number from an environment variable ──────────
+// Never hardcode phone numbers or contact info directly in source code.
+// Set NEXT_PUBLIC_WHATSAPP_NUMBER=923008457933 in your .env.local file.
+// The NEXT_PUBLIC_ prefix is intentionally used here because this is publicly
+// visible UI data — it is not a secret.
+const WHATSAPP_NUMBER =
+  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "923008457933";
+
+// ── SECURITY: Build the WhatsApp URL with encodeURIComponent ─────────────────
+// Do NOT manually percent-encode message strings. encodeURIComponent ensures
+// all special characters are handled correctly and prevents URL injection
+// attacks where crafted input could append extra query parameters.
+const MESSAGE =
+  "Hi Sweetilo! I\u2019m interested in ordering handcrafted treats from your cloud bakehouse.";
+
 export default function WhatsAppFAB() {
-  const whatsappUrl =
-    "https://wa.me/923001234567?text=Hi%20Sweetilo!%20I'm%20interested%20in%20ordering%20handcrafted%20treats%20from%20your%20cloud%20bakehouse.";
+  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(MESSAGE)}`;
 
   return (
     <div className="fixed bottom-20 lg:bottom-8 right-5 lg:right-8 z-40 flex items-center gap-2.5 group">

@@ -4,6 +4,101 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 const BucketContext = createContext(null);
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SECURITY: Schema-validate items read from localStorage.
+// An attacker who can write to localStorage (e.g., via a stored-XSS on a
+// different same-origin page, or a compromised browser extension) could inject
+// malicious objects into cart state. We validate every field before trusting it.
+// ─────────────────────────────────────────────────────────────────────────────
+const MAX_QUANTITY    = 99;   // Prevent absurd quantity values
+const MAX_BUCKET_SIZE = 50;   // Prevent storage-exhaustion / DoS
+const MAX_NAME_LENGTH = 200;  // Limit string sizes embedded in the DOM
+const MAX_NOTE_LENGTH = 500;
+
+/**
+ * Sanitize a plain string from untrusted storage.
+ * Strips control characters and truncates to maxLen.
+ */
+function sanitizeString(val, maxLen = MAX_NAME_LENGTH) {
+  if (typeof val !== "string") return "";
+  return val.replace(/[\x00-\x1F\x7F]/g, "").slice(0, maxLen);
+}
+
+/**
+ * Validate and sanitize a single bucket item sourced from localStorage.
+ * Returns null if the item fails validation (will be filtered out of state).
+ */
+function validateBucketItem(item) {
+  if (!item || typeof item !== "object") return null;
+  const { product, quantity, notes } = item;
+
+  // Product must be a proper object with the required typed fields.
+  if (!product || typeof product !== "object") return null;
+  if (typeof product.id !== "string" || !product.id) return null;
+  if (
+    typeof product.price !== "number" ||
+    product.price < 0 ||
+    !isFinite(product.price)
+  )
+    return null;
+
+  // Quantity must be a safe positive integer within bounds.
+  const qty = Number(quantity);
+  if (!Number.isInteger(qty) || qty < 1 || qty > MAX_QUANTITY) return null;
+
+  // Return a sanitized clone — never return the raw storage object.
+  return {
+    product: {
+      id: sanitizeString(product.id, 50),
+      name: sanitizeString(product.name),
+      price: product.price,
+      // Constrain the image URL to the only trusted CDN we allow.
+      // Any other URL is replaced with empty string and the UI falls back.
+      image:
+        typeof product.image === "string" &&
+        product.image.startsWith("https://images.unsplash.com/")
+          ? sanitizeString(product.image, 400)
+          : "",
+      categoryName: sanitizeString(product.categoryName, 100),
+      weight: sanitizeString(product.weight || "", 100),
+    },
+    quantity: qty,
+    // Notes are user-supplied — sanitize to prevent stored XSS via notifications.
+    notes: sanitizeString(notes || "", MAX_NOTE_LENGTH),
+  };
+}
+
+/**
+ * Parse and schema-validate the full bucket array from raw localStorage JSON.
+ * Returns [] if data is missing, malformed, or entirely fails validation.
+ */
+function parseSavedBucket(raw) {
+  try {
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .slice(0, MAX_BUCKET_SIZE)      // cap before mapping to avoid memory DoS
+      .map(validateBucketItem)
+      .filter(Boolean);               // drop items that failed validation
+  } catch {
+    // JSON.parse threw — storage was corrupted or tampered with; start fresh.
+    return [];
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECURITY: Promo code validation.
+// All codes are held in a server-side lookup table in a real application.
+// For this purely client-side prototype we keep the table here, but:
+//   1. We do NOT disclose valid code names in error messages.
+//   2. Input is sanitized and normalised before comparison.
+//   3. Consider moving to a server action / API route for production.
+// ─────────────────────────────────────────────────────────────────────────────
+const VALID_PROMOS = Object.freeze({
+  CLOUD9: 15,
+  SWEETILO10: 10,
+});
+
 export function BucketProvider({ children }) {
   const [bucket, setBucket] = useState([]);
   const [isBucketOpen, setIsBucketOpen] = useState(false);
@@ -11,24 +106,27 @@ export function BucketProvider({ children }) {
   const [discountPercent, setDiscountPercent] = useState(0);
   const [notification, setNotification] = useState(null);
 
-  // Load bucket from localStorage on mount
+  // ── Load & validate bucket from localStorage on mount ──────────────────
+  // parseSavedBucket() validates every field — raw storage is never trusted.
   useEffect(() => {
     try {
       const saved = localStorage.getItem("sweetilo_bucket");
       if (saved) {
-        setBucket(JSON.parse(saved));
+        setBucket(parseSavedBucket(saved));
       }
-    } catch (e) {
-      console.error("Failed to load bucket from localStorage", e);
+    } catch {
+      // localStorage inaccessible (private mode, storage blocked) — start empty.
+      // SECURITY: Do not console.error here; stack traces should not leak to
+      // browser DevTools in production.
     }
   }, []);
 
-  // Save to localStorage whenever bucket changes
+  // Persist bucket to localStorage whenever it changes.
   useEffect(() => {
     try {
       localStorage.setItem("sweetilo_bucket", JSON.stringify(bucket));
-    } catch (e) {
-      console.error("Failed to save bucket to localStorage", e);
+    } catch {
+      // Quota exceeded or storage blocked — ignore silently.
     }
   }, [bucket]);
 
@@ -40,37 +138,55 @@ export function BucketProvider({ children }) {
   };
 
   const addToBucket = (product, quantity = 1, notes = "") => {
+    // ── SECURITY: Validate every item before it enters state ─────────────
+    const validatedItem = validateBucketItem({ product, quantity, notes });
+    if (!validatedItem) return; // silently reject malformed / untrusted input
+
     setBucket((prev) => {
-      const existingIndex = prev.findIndex((item) => item.product.id === product.id);
+      if (prev.length >= MAX_BUCKET_SIZE) return prev; // DoS guard
+      const existingIndex = prev.findIndex(
+        (item) => item.product.id === validatedItem.product.id
+      );
       if (existingIndex > -1) {
         const next = [...prev];
         next[existingIndex] = {
           ...next[existingIndex],
-          quantity: next[existingIndex].quantity + quantity,
-          notes: notes || next[existingIndex].notes,
+          // Cap accumulated quantity to prevent integer abuse
+          quantity: Math.min(
+            next[existingIndex].quantity + validatedItem.quantity,
+            MAX_QUANTITY
+          ),
+          notes: validatedItem.notes || next[existingIndex].notes,
         };
         return next;
       } else {
-        return [...prev, { product, quantity, notes }];
+        return [...prev, validatedItem];
       }
     });
 
-    showNotification(`Added "${product.name}" to your Bucket!`);
+    // product.name is already sanitized in validateBucketItem — safe to embed.
+    showNotification(`Added "${validatedItem.product.name}" to your Bucket!`);
     setIsBucketOpen(true);
   };
 
   const removeFromBucket = (productId) => {
+    if (typeof productId !== "string") return;
     setBucket((prev) => prev.filter((item) => item.product.id !== productId));
   };
 
   const updateQuantity = (productId, newQuantity) => {
-    if (newQuantity <= 0) {
+    if (typeof productId !== "string") return;
+    const qty = Math.floor(Number(newQuantity));
+    if (!isFinite(qty)) return;
+
+    if (qty <= 0) {
       removeFromBucket(productId);
       return;
     }
+    const bounded = Math.min(qty, MAX_QUANTITY); // enforce upper bound
     setBucket((prev) =>
       prev.map((item) =>
-        item.product.id === productId ? { ...item, quantity: newQuantity } : item
+        item.product.id === productId ? { ...item, quantity: bounded } : item
       )
     );
   };
@@ -81,24 +197,23 @@ export function BucketProvider({ children }) {
     setDiscountPercent(0);
     try {
       localStorage.removeItem("sweetilo_bucket");
-    } catch (e) {}
+    } catch { /* ignore */ }
   };
 
   const applyPromo = (code) => {
-    const cleaned = code.trim().toUpperCase();
-    if (cleaned === "CLOUD9") {
-      setPromoCode("CLOUD9");
-      setDiscountPercent(15);
-      showNotification("Promo CLOUD9 applied! 15% discount granted.", "success");
-      return { success: true, message: "15% discount applied!" };
-    } else if (cleaned === "SWEETILO10") {
-      setPromoCode("SWEETILO10");
-      setDiscountPercent(10);
-      showNotification("Promo SWEETILO10 applied! 10% discount granted.", "success");
-      return { success: true, message: "10% discount applied!" };
+    // ── SECURITY: Sanitize, normalise, then look up in a whitelist table ─
+    // The error message never reveals which codes are valid.
+    const cleaned = sanitizeString(code, 30).trim().toUpperCase();
+    const discount = VALID_PROMOS[cleaned];
+
+    if (discount !== undefined) {
+      setPromoCode(cleaned);
+      setDiscountPercent(discount);
+      showNotification(`Promo applied! ${discount}% discount granted.`, "success");
+      return { success: true, message: `${discount}% discount applied!` };
     } else {
-      showNotification("Invalid code. Try using 'CLOUD9' for 15% off!", "error");
-      return { success: false, message: "Invalid promo code. Try 'CLOUD9'" };
+      showNotification("Invalid or expired promo code.", "error");
+      return { success: false, message: "Invalid or expired promo code." };
     }
   };
 
