@@ -7,6 +7,8 @@ import MockupHeroSection from "@/components/MockupHeroSection";
 import BentoShowcaseV3 from "@/components/BentoShowcaseV3";
 import ProductCard from "@/components/ProductCard";
 import CothmShield from "@/components/CothmShield";
+import Interactive3DCakeStudio from "@/components/3d/Interactive3DCakeStudio";
+import ScrollFloating3DLayer from "@/components/3d/ScrollFloating3DLayer";
 import { TESTIMONIALS, PRODUCTS, CATEGORIES } from "@/data/data";
 
 // ── SECURITY: Build WhatsApp URL from env var, not hardcoded string ────────────
@@ -86,10 +88,49 @@ export default function HomePage() {
     PRODUCTS.find((p) => p.id === "drink-02"),
   ].filter(Boolean);
 
+  // Extended curated reviews for seamless continuous moving marquee
+  const extendedReviews = [
+    ...TESTIMONIALS,
+    {
+      quote: "Ordered for our anniversary. The rosewater notes are subtle, perfectly balanced with emerald pistachios. Arrived in pristine refrigerated packaging.",
+      author: "Dr. Ayesha Siddiqui",
+      city: "Model Town, Lahore",
+      rating: 5,
+      item: "Pistachio Rose Cake",
+    },
+    {
+      quote: "Heated it in the microwave for 12 seconds — molten center burst with rich Belgian cocoa. Outstanding artisan baking.",
+      author: "Omar Farooq",
+      city: "DHA Phase 6, Lahore",
+      rating: 5,
+      item: "NYC Dark Lava Cookie",
+    },
+    {
+      quote: "Real savoiardi ladyfingers soaked in dark roast espresso. Light, airy, not overly sweet. Hands down the highest quality dessert cup in town.",
+      author: "Mehwish Riaz",
+      city: "Gulberg III, Lahore",
+      rating: 5,
+      item: "Italian Tiramisu Cup",
+    },
+    {
+      quote: "Our bespoke wedding cake matched the moodboard photo exactly! Every single guest complimented the Belgian ganache layers.",
+      author: "Salman & Fatima",
+      city: "Bahria Town, Rawalpindi",
+      rating: 5,
+      item: "Two-Tier Floral Cake",
+    },
+  ];
+
+  // Duplicate for seamless 0% -> -50% infinite marquee animation
+  const marqueeReviews = [...extendedReviews, ...extendedReviews];
+
   useScrollReveal();
 
   return (
     <div className="relative overflow-hidden bg-[#FAF7F2]">
+
+      {/* Global Ambient 3D Floating Particles & Confection Stars */}
+      <ScrollFloating3DLayer />
 
       {/* ===== 1. HERO ===== */}
       <MockupHeroSection />
@@ -107,7 +148,7 @@ export default function HomePage() {
         </div>
 
         <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 relative z-10">
-          <div className="reveal flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-10 gap-3">
+          <div className="reveal flex flex-col sm:flex-row items-center sm:items-end text-center sm:text-left justify-between mb-8 sm:mb-10 gap-3">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-[#4a196d] mb-2">— Cloud9 Top Picks</p>
               <h2 className="font-sans text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#1B0D24] leading-tight">
@@ -117,7 +158,7 @@ export default function HomePage() {
             </div>
             <Link
               href="/menu"
-              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#4a196d] hover:text-[#7e22ce] transition-colors group shrink-0 self-start sm:self-auto"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#4a196d] hover:text-[#7e22ce] transition-colors group shrink-0 self-center sm:self-auto"
             >
               <span>View Full Menu</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -135,6 +176,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ===== 3.5 INTERACTIVE 3D CAKE STUDIO ===== */}
+      <Interactive3DCakeStudio />
+
       {/* ===== 4. STORY BANNER (full-width wavy dark section) ===== */}
       <section className="relative py-20 sm:py-28 bg-[#4a196d] overflow-hidden">
         {/* Wave top */}
@@ -150,13 +194,13 @@ export default function HomePage() {
           </svg>
         </div>
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
-            {/* Left: Text */}
-            <div className="reveal space-y-5 text-white">
+            {/* Left: Text (Centralized on mobile) */}
+            <div className="reveal space-y-5 text-white text-center lg:text-left flex flex-col items-center lg:items-start">
               {/* Doodle leaf accent */}
-              <div className="flex items-center gap-2 mb-1">
+              <div className="flex items-center justify-center lg:justify-start gap-2 mb-1">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E0A94A" strokeWidth="2" className="animate-float-cloud shrink-0">
                   <path d="M11 20A7 7 0 0 1 4 13V3l8 1 8-1v10a7 7 0 0 1-7 7z"/><path d="M11 20v-9"/>
                 </svg>
@@ -169,14 +213,14 @@ export default function HomePage() {
               </h2>
 
               {/* Supporting text */}
-              <blockquote className="text-purple-100 text-sm sm:text-base leading-relaxed border-l-2 border-[#E0A94A] pl-4 italic">
+              <blockquote className="text-purple-100 text-sm sm:text-base leading-relaxed border-l-0 lg:border-l-2 pl-0 lg:pl-4 italic text-center lg:text-left mx-auto lg:mx-0 max-w-lg">
                 &ldquo;More than a title, this is a dream of creating a haven for all the sweet tooths out there. We never compromise on French butter, Belgian chocolate, or freshness.&rdquo;
               </blockquote>
-              <p className="text-purple-200 text-xs sm:text-sm leading-relaxed max-w-lg">
+              <p className="text-purple-200 text-xs sm:text-sm leading-relaxed max-w-lg mx-auto lg:mx-0 text-center lg:text-left">
                 Every morning, our cloud bakehouse prepares strictly limited micro-batches. Whether it is a multi-tiered ganache cake or warm molten cookies, each treat is boxed with care and dispatched in temperature-controlled totes fresh across Lahore.
               </p>
 
-              <div className="flex items-center gap-3 pt-2 flex-wrap">
+              <div className="flex items-center justify-center lg:justify-start gap-3 pt-2 flex-wrap">
                 <Link
                   href="/about"
                   className="pill-btn bg-[#E0A94A] text-[#230737] shadow-[0_6px_20px_rgba(224,169,74,0.35)] hover:bg-[#F59E0B] text-sm"
@@ -229,8 +273,8 @@ export default function HomePage() {
       <section className="py-14 sm:py-20 bg-[#FAF7F2]">
         <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
 
-          {/* Header */}
-          <div className="reveal mb-10 sm:mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          {/* Header (Centralized on mobile) */}
+          <div className="reveal mb-10 sm:mb-12 flex flex-col sm:flex-row items-center sm:items-end text-center sm:text-left justify-between gap-4">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-[#4a196d] mb-2">— Curated Selections</p>
               <h2 className="font-sans text-3xl sm:text-4xl font-extrabold text-[#1B0D24] leading-tight">
@@ -241,11 +285,11 @@ export default function HomePage() {
                   <path d="M2,12 C10,4 22,14 38,6" stroke="#E0A94A" strokeWidth="3" fill="none" strokeLinecap="round"/>
                 </svg>
               </h2>
-              <p className="mt-2 text-sm text-stone-500 max-w-md leading-relaxed">
+              <p className="mt-2 text-sm text-stone-500 max-w-md leading-relaxed mx-auto sm:mx-0">
                 From savory appetizers to indulgent desserts, every dish is made to tantalize your taste buds.
               </p>
             </div>
-            <Link href="/menu" className="inline-flex items-center gap-1.5 text-sm font-bold text-[#4a196d] hover:text-[#7e22ce] transition-colors group shrink-0 self-start sm:self-auto">
+            <Link href="/menu" className="inline-flex items-center gap-1.5 text-sm font-bold text-[#4a196d] hover:text-[#7e22ce] transition-colors group shrink-0 self-center sm:self-auto">
               <span>View All</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
@@ -262,10 +306,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== 6. TESTIMONIALS ===== */}
-      <section id="reviews" className="py-14 sm:py-20 bg-white relative">
+      {/* ===== 6. TESTIMONIALS (Customer Love) ===== */}
+      <section id="reviews" className="py-14 sm:py-20 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-          <div className="reveal flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-12 gap-3">
+          <div className="reveal flex flex-col sm:flex-row items-center sm:items-end text-center sm:text-left justify-between mb-8 sm:mb-12 gap-3">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-[#4a196d] mb-2">— Customer Love</p>
               <h2 className="font-sans text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#1B0D24]">
@@ -275,40 +319,47 @@ export default function HomePage() {
             </div>
             <Link
               href="/reviews"
-              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#4a196d] hover:text-[#7e22ce] transition-colors group shrink-0 self-start sm:self-auto"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#4a196d] hover:text-[#7e22ce] transition-colors group shrink-0 self-center sm:self-auto"
             >
               <span>View All & Leave a Review</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {TESTIMONIALS.map((item, idx) => (
-              <div
-                key={idx}
-                className={`reveal reveal-delay-${idx + 1} bg-[#FAF7F2] p-5 sm:p-6 rounded-3xl border border-purple-200/60 shadow-[0_4px_20px_rgba(74,25,109,0.06)] hover:shadow-[0_10px_30px_rgba(74,25,109,0.12)] hover:border-purple-300 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between`}
-              >
-                <div>
-                  <div className="flex items-center text-amber-400 mb-3 gap-0.5">
-                    {[...Array(item.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-[#E0A94A] text-[#E0A94A]" />
-                    ))}
+          {/* Continuous moving reviews marquee: exactly 2 reviews side-by-side on mobile, remaining moving at normal speed */}
+          <div className="relative w-full overflow-hidden py-2">
+            {/* Subtle side gradient fade masks for seamless entry/exit */}
+            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 w-4 sm:w-16 bg-gradient-to-r from-white to-transparent z-10" />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 w-4 sm:w-16 bg-gradient-to-l from-white to-transparent z-10" />
+
+            <div className="animate-reviews-marquee flex gap-2 sm:gap-5">
+              {marqueeReviews.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="w-[calc(50vw-14px)] min-w-[calc(50vw-14px)] sm:w-[280px] sm:min-w-[280px] lg:w-[320px] lg:min-w-[320px] shrink-0 bg-[#FAF7F2] p-3 sm:p-6 rounded-2xl sm:rounded-3xl border border-purple-200/60 shadow-[0_4px_16px_rgba(74,25,109,0.05)] hover:shadow-[0_10px_28px_rgba(74,25,109,0.12)] hover:border-purple-300 transition-all flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center text-amber-400 mb-2 sm:mb-3 gap-0.5">
+                      {[...Array(item.rating)].map((_, i) => (
+                        <Star key={i} className="w-3 h-3 sm:w-4 sm:h-4 fill-[#E0A94A] text-[#E0A94A]" />
+                      ))}
+                    </div>
+                    <p className="text-stone-600 text-[11px] sm:text-sm italic leading-relaxed mb-3 sm:mb-5 font-sans line-clamp-3 sm:line-clamp-4">
+                      &ldquo;{item.quote}&rdquo;
+                    </p>
                   </div>
-                  <p className="text-stone-600 text-xs sm:text-sm italic leading-relaxed mb-5 font-sans">
-                    &ldquo;{item.quote}&rdquo;
-                  </p>
-                </div>
-                <div className="pt-4 border-t border-purple-100 flex items-center justify-between text-xs gap-2">
-                  <div className="min-w-0">
-                    <h4 className="font-bold text-[#1B0D24] truncate">{item.author}</h4>
-                    <p className="text-[11px] text-stone-400 truncate">{item.city}</p>
+                  <div className="pt-2 sm:pt-4 border-t border-purple-100 flex items-center justify-between text-xs gap-1.5 sm:gap-2">
+                    <div className="min-w-0">
+                      <h4 className="font-bold text-[#1B0D24] text-[10.5px] sm:text-xs truncate">{item.author}</h4>
+                      <p className="text-[9px] sm:text-[11px] text-stone-400 truncate">{item.city}</p>
+                    </div>
+                    <span className="text-[8.5px] sm:text-[10px] bg-[#F6EFFC] text-[#4a196d] font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full border border-purple-200/80 shadow-xs max-w-[85px] sm:max-w-[120px] text-right truncate shrink-0">
+                      {item.item}
+                    </span>
                   </div>
-                  <span className="text-[10px] bg-[#F6EFFC] text-[#4a196d] font-bold px-2.5 py-1 rounded-full border border-purple-200/80 shadow-xs max-w-[120px] text-right leading-tight shrink-0">
-                    {item.item}
-                  </span>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -328,22 +379,22 @@ export default function HomePage() {
           </svg>
         </div>
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="reveal lg:col-span-8 text-white space-y-4">
+            <div className="reveal lg:col-span-8 text-white space-y-4 text-center lg:text-left flex flex-col items-center lg:items-start">
               {/* Handwritten line */}
-              <span className="font-script text-2xl sm:text-3xl text-[#E0A94A] block">Craving Something Sweet?</span>
+              <span className="font-script text-2xl sm:text-3xl text-[#E0A94A] block mx-auto lg:mx-0">Craving Something Sweet?</span>
 
               <h2 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
                 Ready to indulge in
                 <span className="text-[#E0A94A]"> Cloud9?</span>
               </h2>
 
-              <p className="text-purple-200 text-sm max-w-lg leading-relaxed">
+              <p className="text-purple-200 text-sm max-w-lg leading-relaxed mx-auto lg:mx-0">
                 Order now and enjoy the freshest bakes, delivered with love. Explore our complete menu of artisan cakes, molten cookies, dessert cups and cold bottle milks.
               </p>
 
-              <div className="flex flex-wrap gap-3 pt-2">
+              <div className="flex flex-wrap gap-3 pt-2 justify-center lg:justify-start">
                 <Link
                   href="/menu"
                   className="pill-btn bg-[#E0A94A] text-[#230737] shadow-[0_8px_24px_rgba(224,169,74,0.35)] hover:bg-[#F59E0B] font-black text-sm"

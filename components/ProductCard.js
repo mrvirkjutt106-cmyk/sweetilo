@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Star, ShoppingBag, Clock, Check } from "lucide-react";
 import { useBucket } from "@/context/BucketContext";
+import Card3DTilt from "@/components/3d/Card3DTilt";
 
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80";
@@ -32,7 +33,8 @@ export default function ProductCard({ product }) {
     : null;
 
   return (
-    <div className="artisan-card group relative bg-white rounded-[18px] sm:rounded-[28px] overflow-hidden border border-purple-200/70 shadow-[0_4px_18px_rgba(74,25,109,0.06)] hover:shadow-[0_18px_44px_rgba(74,25,109,0.14)] hover:border-[#9333ea]/40 flex flex-col h-full w-full">
+    <Card3DTilt className="h-full w-full" maxTilt={6}>
+      <div className="artisan-card group relative bg-white rounded-[18px] sm:rounded-[28px] overflow-hidden border border-purple-200/70 shadow-[0_4px_18px_rgba(74,25,109,0.06)] hover:shadow-[0_18px_44px_rgba(74,25,109,0.14)] hover:border-[#9333ea]/40 flex flex-col h-full w-full">
 
       {/* ---- Image tile: Proportional Aspect Ratio (4:3) ---- */}
       <div className={`relative aspect-[4/3] w-full overflow-hidden ${tileBg}`}>
@@ -63,11 +65,11 @@ export default function ProductCard({ product }) {
         </div>
       </div>
 
-      {/* ---- Product info ---- */}
-      <div className="p-2 sm:p-4 flex-1 flex flex-col justify-between gap-1.5 sm:gap-2">
+      {/* ---- Product info (Centralized on mobile) ---- */}
+      <div className="p-2 sm:p-4 flex-1 flex flex-col justify-between gap-1.5 sm:gap-2 text-center sm:text-left">
         <div className="space-y-1">
           {/* Rating */}
-          <div className="flex items-center gap-1 sm:gap-1.5">
+          <div className="flex items-center justify-center sm:justify-start gap-1 sm:gap-1.5">
             <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-[#E0A94A] text-[#E0A94A] shrink-0" />
             <span className="text-[10.5px] sm:text-xs font-bold text-stone-800">{product.rating}</span>
             <span className="text-[9.5px] sm:text-[11px] text-stone-400">({product.reviewsCount})</span>
@@ -84,10 +86,10 @@ export default function ProductCard({ product }) {
           </p>
         </div>
 
-        {/* ---- Price + Add button: Stacked on mobile, inline on desktop ---- */}
+        {/* ---- Price + Add button: Stacked & centered on mobile, inline on desktop ---- */}
         <div className="pt-2 mt-auto border-t border-purple-50/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 sm:gap-2">
           {priceDisplay ? (
-            <div className="flex items-baseline justify-between sm:block min-w-0">
+            <div className="flex items-baseline justify-center sm:justify-start sm:block min-w-0">
               <span className="text-xs sm:text-base font-extrabold text-[#4a196d] whitespace-nowrap leading-tight">
                 {priceDisplay}
               </span>
@@ -123,5 +125,6 @@ export default function ProductCard({ product }) {
         </div>
       </div>
     </div>
+    </Card3DTilt>
   );
 }

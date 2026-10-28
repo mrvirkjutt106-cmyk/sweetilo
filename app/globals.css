@@ -11,8 +11,29 @@
   --lavender-glow: rgba(147, 51, 234, 0.12);
 }
 
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 body {
@@ -349,4 +370,26 @@ body {
 .navbar-scrolled {
   background: rgba(255,255,255,0.97) !important;
   box-shadow: 0 4px 24px rgba(74,25,109,0.08) !important;
+}
+
+/* ---- Customer Reviews Infinite Marquee ---- */
+@keyframes marqueeReviews {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-reviews-marquee {
+  display: flex;
+  width: max-content;
+  animation: marqueeReviews 32s linear infinite;
+  will-change: transform;
+}
+
+.animate-reviews-marquee:hover,
+.animate-reviews-marquee:active {
+  animation-play-state: paused;
 }

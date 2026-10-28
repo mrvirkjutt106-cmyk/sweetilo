@@ -104,6 +104,48 @@ const nextConfig = {
       },
     ];
   },
+
+  // ─── SENSITIVE FILE PROTECTION ─────────────────────────────────────────────
+  // Defense-in-depth: Block public HTTP access to .env, .git, and config files
+  async redirects() {
+    return [
+      {
+        source: '/.env',
+        destination: '/404',
+        permanent: false,
+      },
+      {
+        source: '/.env.:ext*',
+        destination: '/404',
+        permanent: false,
+      },
+      {
+        source: '/.git',
+        destination: '/404',
+        permanent: false,
+      },
+      {
+        source: '/.git/:path*',
+        destination: '/404',
+        permanent: false,
+      },
+      {
+        source: '/:subpath*/.env',
+        destination: '/404',
+        permanent: false,
+      },
+      {
+        source: '/:subpath*/.env.:ext*',
+        destination: '/404',
+        permanent: false,
+      },
+      {
+        source: '/:subpath*/.git/:path*',
+        destination: '/404',
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

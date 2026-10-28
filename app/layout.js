@@ -7,6 +7,8 @@ import BucketSidebar from "@/components/BucketSidebar";
 import NotificationToast from "@/components/NotificationToast";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import WhatsAppFAB from "@/components/WhatsAppFAB";
+import SmoothScrollProvider from "@/components/3d/SmoothScrollProvider";
+import ScrollProgressBar3D from "@/components/3d/ScrollProgressBar3D";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -63,21 +65,24 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${outfit.variable} ${playfair.variable} ${caveat.variable}`}>
       <body className="min-h-screen flex flex-col bg-[#FAF7F2] text-stone-900 font-sans antialiased selection:bg-[#4a196d] selection:text-white">
-        <BucketProvider>
-          <NotificationToast />
-          {/* Desktop Floating Glassmorphism Header */}
-          <Navbar />
-          {/* Main App Content */}
-          <main className="flex-grow pb-24 lg:pb-0">{children}</main>
-          {/* Cart Bucket Drawer */}
-          <BucketSidebar />
-          {/* Global WhatsApp Action Button pinned to bottom right on all screens */}
-          <WhatsAppFAB />
-          {/* Mobile Fixed White Pill Bottom Navigation */}
-          <MobileBottomNav />
-          {/* Footer */}
-          <Footer />
-        </BucketProvider>
+        <SmoothScrollProvider>
+          <ScrollProgressBar3D />
+          <BucketProvider>
+            <NotificationToast />
+            {/* Desktop Floating Glassmorphism Header */}
+            <Navbar />
+            {/* Main App Content */}
+            <main className="flex-grow pb-24 lg:pb-0">{children}</main>
+            {/* Cart Bucket Drawer */}
+            <BucketSidebar />
+            {/* Global WhatsApp Action Button pinned to bottom right on all screens */}
+            <WhatsAppFAB />
+            {/* Mobile Fixed White Pill Bottom Navigation */}
+            <MobileBottomNav />
+            {/* Footer */}
+            <Footer />
+          </BucketProvider>
+        </SmoothScrollProvider>
       </body>
     </html>
   );

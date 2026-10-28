@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Phone, Mail, MapPin, Clock, ShieldCheck, Heart } from "lucide-react";
+import { Phone, Mail, Clock, ShieldCheck, Heart } from "lucide-react";
 
 // SECURITY: Phone number from env variable — never hardcode in source
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "923008457933";
@@ -55,10 +55,10 @@ export default function Footer() {
         className="absolute top-0 left-1/2 -translate-x-1/2 w-4/5 h-36 bg-gradient-to-b from-[#7e22ce]/20 via-[#4a196d]/08 to-transparent blur-3xl pointer-events-none"
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
 
         {/* ---- Centered logo + tagline + social ---- */}
-        <div className="flex flex-col items-center text-center mb-12 border-b border-purple-900/40 pb-10">
+        <div className="flex flex-col items-center text-center mb-10 border-b border-purple-900/40 pb-8">
           <Link href="/" className="inline-block mb-4 group">
             <div className="bg-white/95 rounded-2xl px-4 py-2.5 inline-block shadow-md border border-purple-200/80 group-hover:border-purple-400 transition-colors">
               <img
@@ -72,7 +72,7 @@ export default function Footer() {
 
           <p className="font-script text-2xl text-[#E0A94A] mb-1">Baked on Cloud9,</p>
           <p className="text-xs text-purple-300/80 max-w-xs leading-relaxed mb-3">
-            delivered to your heart. Lahore&apos;s premier micro-batch homemade bakehouse.
+            delivered to your heart. Lahore&apos;s premier micro-batch homemade bakery.
           </p>
           <p className="text-[11px] font-bold text-stone-400 tracking-wider mb-5">
             Follow us: <span className="text-[#E0A94A]">@Sweetilo.Pk</span>
@@ -95,21 +95,21 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ---- Links grid ---- */}
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-8 pb-10 border-b border-purple-900/40">
+        {/* ---- Links grid: Collections & Contact Us in SAME ROW on mobile ---- */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 pb-10 border-b border-purple-900/40">
           {/* Brand info */}
-          <div className="col-span-2 lg:col-span-2 space-y-3">
-            <p className="text-purple-200/90 text-xs leading-relaxed max-w-xs">
+          <div className="col-span-2 lg:col-span-2 space-y-3 text-center lg:text-left flex flex-col items-center lg:items-start">
+            <p className="text-purple-200/90 text-xs leading-relaxed max-w-md">
               Handcrafted Belgian Noir Ganache cakes, molten NYC cookies, chilled saffron dessert cups, and vintage glass bottle brews.
             </p>
-            <div className="flex items-center gap-2 text-xs text-[#E0A94A] font-bold">
+            <div className="flex items-center justify-center lg:justify-start gap-2 text-xs text-[#E0A94A] font-bold">
               <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
               <span className="text-[11px]">COTHM Certified Baker · Halal Certified · 100% French Butter</span>
             </div>
           </div>
 
-          {/* Collections */}
-          <div className="col-span-1 space-y-3">
+          {/* Collections (Same row on mobile) */}
+          <div className="col-span-1 space-y-3 text-center sm:text-left">
             <h4 className="text-xs font-black text-white tracking-widest uppercase">Collections</h4>
             <ul className="space-y-2 text-xs text-stone-400">
               {[
@@ -128,37 +128,23 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Bakehouse Location — Lahore Only */}
-          <div className="col-span-1 space-y-3">
-            <h4 className="text-xs font-black text-white tracking-widest uppercase">Bakehouse</h4>
-            <div className="space-y-2.5 text-xs text-stone-400">
-              <div className="flex items-start gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-[#9333ea] shrink-0 mt-0.5" />
-                <span><strong className="text-stone-300">Lahore:</strong> Cloud Kitchen, DHA &amp; Gulberg</span>
-              </div>
-              <p className="text-[11px] text-stone-500 leading-relaxed">
-                Handcrafted micro-batches dispatched fresh daily across all Lahore areas.
-              </p>
-            </div>
-          </div>
-
-          {/* Hours & Contact */}
-          <div className="col-span-2 sm:col-span-1 space-y-3 border-t border-purple-900/40 pt-4 sm:border-t-0 sm:pt-0">
+          {/* Hours & Contact (Same row on mobile with Collections) */}
+          <div className="col-span-1 space-y-3 text-center sm:text-left">
             <h4 className="text-xs font-black text-white tracking-widest uppercase">Contact Us</h4>
             <div className="space-y-2 text-xs text-stone-400">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2">
                 <Clock className="w-3.5 h-3.5 text-[#E0A94A] shrink-0" />
-                <span>10:00 AM – 1:00 AM Daily</span>
+                <span className="text-[11px] sm:text-xs">10:00 AM – 1:00 AM</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2">
                 <Phone className="w-3.5 h-3.5 text-[#9333ea] shrink-0" />
-                <span>+92 (300) 845-SWEET</span>
+                <span className="text-[11px] sm:text-xs">+92 300 845-SWEET</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2">
                 <Mail className="w-3.5 h-3.5 text-[#E0A94A] shrink-0" />
                 <a
                   href="mailto:sweetilo.pk@gmail.com"
-                  className="hover:text-white transition-colors underline-offset-2 hover:underline"
+                  className="hover:text-white transition-colors underline-offset-2 hover:underline text-[11px] sm:text-xs truncate max-w-[140px] sm:max-w-none"
                 >
                   sweetilo.pk@gmail.com
                 </a>

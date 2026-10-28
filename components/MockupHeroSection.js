@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Heart } from "lucide-react";
+import { Heart, Sparkles, Eye } from "lucide-react";
+import Hero3DCakeCanvas from "@/components/3d/Hero3DCakeCanvas";
 
 // SECURITY: Phone number sourced from env variable, URL built with encodeURIComponent
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "923008457933";
 
 export default function MockupHeroSection() {
+  const [viewMode, setViewMode] = useState("3d");
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
     "Hi Sweetilo! I'd like to order some fresh treats."
   )}`;
@@ -115,14 +117,14 @@ export default function MockupHeroSection() {
           </svg>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative" style={{ zIndex: 3 }}>
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative" style={{ zIndex: 3 }}>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
 
-            {/* ===== LEFT COLUMN: Text content ===== */}
-            <div className="lg:col-span-6 xl:col-span-5 space-y-5 text-left">
+            {/* ===== LEFT COLUMN: Text content (Centralized on mobile) ===== */}
+            <div className="lg:col-span-6 xl:col-span-5 space-y-5 text-center lg:text-left flex flex-col items-center lg:items-start">
 
               {/* Handwritten script tagline */}
-              <div className="hero-slide-up hero-slide-up-1 inline-flex items-center gap-2">
+              <div className="hero-slide-up hero-slide-up-1 inline-flex items-center justify-center lg:justify-start gap-2">
                 <span className="font-script text-2xl sm:text-3xl text-[#4a196d] font-bold -rotate-1">
                   Freshly Baked,
                 </span>
@@ -130,7 +132,7 @@ export default function MockupHeroSection() {
               </div>
 
               {/* Main two-line bold headline */}
-              <div className="hero-slide-up hero-slide-up-2">
+              <div className="hero-slide-up hero-slide-up-2 text-center lg:text-left">
                 <h1 className="font-sans text-[2.4rem] sm:text-5xl lg:text-[3.4rem] xl:text-[3.8rem] font-extrabold text-[#230737] leading-[1.07] tracking-[-0.03em]">
                   Baked on{" "}
                   <span className="relative inline-block text-[#4a196d]">
@@ -160,12 +162,12 @@ export default function MockupHeroSection() {
               </div>
 
               {/* Body text */}
-              <p className="hero-slide-up hero-slide-up-3 text-stone-600 text-sm sm:text-base leading-relaxed max-w-md font-sans">
+              <p className="hero-slide-up hero-slide-up-3 text-stone-600 text-sm sm:text-base leading-relaxed max-w-md font-sans mx-auto lg:mx-0 text-center lg:text-left">
                 We bake more than just cakes — we bake pure happiness. From our boutique kitchen to your doorstep, every treat is crafted with French butter, Belgian couverture chocolate, and wholesome love.
               </p>
 
               {/* CTA Buttons */}
-              <div className="hero-slide-up hero-slide-up-4 flex items-center gap-3 flex-wrap pt-1">
+              <div className="hero-slide-up hero-slide-up-4 flex items-center justify-center lg:justify-start gap-3 flex-wrap pt-1">
                 <a
                   href={whatsappUrl}
                   target="_blank"
@@ -185,7 +187,7 @@ export default function MockupHeroSection() {
               </div>
 
               {/* Feature icons row with dividers */}
-              <div className="hero-slide-up hero-slide-up-5 grid grid-cols-3 gap-2 sm:flex sm:items-center sm:gap-0 pt-4 border-t border-purple-100/80">
+              <div className="hero-slide-up hero-slide-up-5 grid grid-cols-3 gap-2 sm:flex sm:items-center sm:gap-0 pt-4 border-t border-purple-100/80 w-full justify-center">
                 {features.map((feat, i) => (
                   <React.Fragment key={feat.label}>
                     <div className="flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-1.5 sm:gap-2.5 sm:px-4 py-1.5 first:sm:pl-0">
@@ -220,7 +222,7 @@ export default function MockupHeroSection() {
               </div>
 
               {/* Hero image container */}
-              <div className="relative w-full max-w-[320px] sm:max-w-[420px] lg:max-w-[520px] xl:max-w-[580px]">
+              <div className="relative w-full max-w-[340px] sm:max-w-[440px] lg:max-w-[520px] xl:max-w-[580px]">
                 {/* Organic blob background */}
                 <div className="absolute inset-[-10%] pointer-events-none" aria-hidden="true">
                   <svg viewBox="0 0 500 480" xmlns="http://www.w3.org/2000/svg" className="w-full h-full animate-blob">
@@ -232,27 +234,56 @@ export default function MockupHeroSection() {
                   </svg>
                 </div>
 
-                {/* The actual hero image */}
-                <div className="relative rounded-[32px] overflow-hidden shadow-[0_20px_60px_rgba(74,25,109,0.22)] border-2 border-white/80 hero-image-in">
-                  <Image
-                    src="/hero-lavender-cake.jpg"
-                    alt="Sweetilo Lavender Drip Cake — Baked on Cloud9"
-                    width={580}
-                    height={440}
-                    priority
-                    className="w-full h-auto object-cover object-center"
-                    sizes="(max-width: 640px) 320px, (max-width: 1024px) 420px, 580px"
-                  />
-                  {/* Soft gradient overlay at bottom */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#230737]/30 via-transparent to-transparent pointer-events-none" />
-
-                  {/* Fresh badge chip */}
-                  <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full border border-purple-200/80 shadow-md flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
-                    <span className="text-[11px] font-bold text-[#230737]">Fresh Micro-Batch Today</span>
-                  </div>
-
+                {/* View Mode Switcher Toggle (3D Interactive vs Studio Photo) */}
+                <div className="absolute -top-3.5 right-2 sm:right-4 z-20 flex items-center gap-1 bg-white/95 backdrop-blur-md p-1 rounded-full border border-purple-200/80 shadow-[0_4px_16px_rgba(74,25,109,0.12)]">
+                  <button
+                    onClick={() => setViewMode("3d")}
+                    className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all ${
+                      viewMode === "3d"
+                        ? "bg-[#4a196d] text-white shadow-xs"
+                        : "text-[#4a196d] hover:bg-purple-50"
+                    }`}
+                    aria-label="Switch to 3D view"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-[#f59e0b]" />
+                    <span>3D Interactive</span>
+                  </button>
+                  <button
+                    onClick={() => setViewMode("photo")}
+                    className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all ${
+                      viewMode === "photo"
+                        ? "bg-[#4a196d] text-white shadow-xs"
+                        : "text-[#4a196d] hover:bg-purple-50"
+                    }`}
+                    aria-label="Switch to Photo view"
+                  >
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>Photo</span>
+                  </button>
                 </div>
+
+                {viewMode === "3d" ? (
+                  <div className="relative rounded-[32px] overflow-hidden shadow-[0_20px_60px_rgba(74,25,109,0.18)] border-2 border-white/90 bg-gradient-to-b from-[#F6EFFC]/70 via-white to-[#F6EFFC]/50 flex items-center justify-center p-2 min-h-[380px] sm:min-h-[460px]">
+                    <Hero3DCakeCanvas />
+                  </div>
+                ) : (
+                  <div className="relative rounded-[32px] overflow-hidden shadow-[0_20px_60px_rgba(74,25,109,0.22)] border-2 border-white/80 hero-image-in">
+                    <Image
+                      src="/hero-lavender-cake.jpg"
+                      alt="Sweetilo Lavender Drip Cake — Baked on Cloud9"
+                      width={580}
+                      height={440}
+                      priority
+                      className="w-full h-auto object-cover object-center"
+                      sizes="(max-width: 640px) 320px, (max-width: 1024px) 420px, 580px"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#230737]/30 via-transparent to-transparent pointer-events-none" />
+                    <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full border border-purple-200/80 shadow-md flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
+                      <span className="text-[11px] font-bold text-[#230737]">Fresh Micro-Batch Today</span>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
